@@ -1,71 +1,152 @@
 ---
-title: Introduction
-description: "Welcome to the home of your new documentation"
+title: Evento API Reference
+sidebarTitle: API Reference
+description: "Access public events data with our simple, powerful REST API"
 ---
 
-<img
-  className="block dark:hidden"
-  src="/images/hero-light.png"
-  alt="Hero Light"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/hero-dark.png"
-  alt="Hero Dark"
-/>
+The Evento API provides a simple way to access public event data. With just one endpoint, you can retrieve all public events associated with any username on the Evento platform.
 
-## Setting up
+<Info>
+The Evento API uses RESTful principles and returns JSON responses with a structured wrapper. All data returned is from public events created by the specified user.
+</Info>
 
-The first step to world-class documentation is setting up your editing environments.
+## Quick Start
+
+Get up and running with the Evento API in minutes.
 
 <CardGroup cols={2}>
   <Card
-    title="Edit Your Docs"
-    icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
+    title="Get API Access"
+    icon="calendar-plus"
+    href="https://cal.com/evento/api"
   >
-    Get your docs set up locally for easy development
+    Schedule a call with our team to get your API key.
   </Card>
   <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
+    title="Make Your First Call"
+    icon="code"
+    href="/api-reference/get"
   >
-    Preview your changes before you push to make sure they're perfect
+    Learn how to fetch events with our GET endpoint.
+  </Card>
+  <Card
+    title="Explore Response Data"
+    icon="database"
+    href="/api-reference/get#response"
+  >
+    Understand the complete event data structure.
+  </Card>
+  <Card
+    title="Integration Examples"
+    icon="puzzle-piece"
+    href="/api-reference/get#examples"
+  >
+    See code examples in multiple languages.
   </Card>
 </CardGroup>
 
-## Make it yours
+## API Overview
 
-Update your docs to your brand and add valuable content for the best user conversion.
+The Evento API is designed with simplicity in mind:
+
+- **Single Endpoint**: One endpoint to get all public events created by a username  
+- **Query Parameter**: Username passed as a query parameter for flexibility
+- **Structured Responses**: JSON responses with success, message, and data wrapper
+- **Public Events Only**: Access only to published, publicly visible events
+
+<Note>
+The API provides read-only access to public events created by users. It returns all published events where visibility = "public" - no RSVP filtering is applied.
+</Note>
+
+## Authentication
+
+All API requests require authentication using an API key.
+
+<Warning>
+You must include your API key in the `x-evento-api-key` header for all requests.
+</Warning>
+
+### Getting Your API Key
+
+To obtain an API key, please schedule a call with our team:
+
+<Card
+  title="Schedule API Access Call"
+  icon="phone"
+  href="https://cal.com/evento/api"
+  cta="Book Now"
+>
+  Our team will provide you with an API key and discuss your use case.
+</Card>
+
+### Using Your API Key
+
+Include your API key in the request header:
+
+```bash
+curl -X GET "https://evento.so/api/ext/v1/events?username=YOUR_USERNAME" \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+## HTTP Status Codes
+
+The Evento API uses standard HTTP status codes to indicate success or failure.
+
+<AccordionGroup>
+  <Accordion title="200 - Success" icon="check">
+    The request was successful. Event data is returned in the response body.
+  </Accordion>
+  <Accordion title="400 - Bad Request" icon="x">
+    Invalid request - missing username, user not found, RPC error, or general failure. All server errors return 400 instead of 500.
+  </Accordion>
+  <Accordion title="401 - Unauthorized" icon="lock">
+    Authentication failed. Check your API key in the `x-evento-api-key` header.
+  </Accordion>
+</AccordionGroup>
+
+## Response Format
+
+All successful API responses return JSON data with the following structure:
+
+<Info>
+All responses include a structured wrapper with success status, message, and data. Each event includes comprehensive details including dates, location, creator information, and event metadata.
+</Info>
+
+### Key Features
+
+<CardGroup cols={3}>
+  <Card title="Event Details" icon="calendar">
+    Complete event information including title, description, cost, and location.
+  </Card>
+  <Card title="Date Handling" icon="clock">
+    Multiple date formats and timezone information for flexible integration.
+  </Card>
+  <Card title="Creator Info" icon="user">
+    Event creator details including username, image, and verification status.
+  </Card>
+</CardGroup>
+
+## Rate Limiting
+
+<Tip>
+Currently, there are no rate limits on the Evento API. However, we recommend implementing reasonable request intervals to ensure optimal performance.
+</Tip>
+
+## Need Help?
 
 <CardGroup cols={2}>
   <Card
-    title="Customize Style"
-    icon="palette"
-    href="https://mintlify.com/docs/settings/global"
+    title="API Reference"
+    icon="book"
+    href="/api-reference/get"
   >
-    Customize your docs to your company's colors and brands
+    Detailed endpoint documentation with examples.
   </Card>
   <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
+    title="Contact Support"
+    icon="headset"
+    href="https://cal.com/evento/api"
   >
-    Automatically generate endpoints from an OpenAPI spec
-  </Card>
-  <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/content/components/accordions"
-  >
-    Build interactive features and designs to guide your users
-  </Card>
-  <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
-  >
-    Check out our showcase of our favorite documentation
+    Get help from our technical team.
   </Card>
 </CardGroup>
