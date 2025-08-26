@@ -1,7 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Evento API Documentation",
+  "name": "Evento Public API Documentation",
+  "version": "1.0.0",
   "colors": {
     "primary": "#dc2626",
     "light": "#dc2626",
@@ -17,9 +18,18 @@
         ]
       },
       {
-        "group": "API Reference",
+        "group": "Events",
         "pages": [
-          "api-reference/get"
+          "api-reference/events/get-event-by-id"
+        ]
+      },
+      {
+        "group": "Users",
+        "pages": [
+          "api-reference/users/get-user-events",
+          "api-reference/users/get-profile-events",
+          "api-reference/users/get-upcoming-events",
+          "api-reference/users/get-past-events"
         ]
       }
     ]
@@ -37,7 +47,7 @@
     }
   ],
   "api": {
-    "baseUrl": "https://evento.so/api/ext/v1",
+    "baseUrl": "https://api.evento.so/api/public/v1",
     "auth": {
       "method": "key",
       "name": "x-evento-api-key"

@@ -1,0 +1,409 @@
+---
+title: 'Get User Events'
+sidebarTitle: 'Get User Events'
+description: 'Retrieve all public events created by a specific user'
+api: 'GET https://api.evento.so/api/public/v1/users/{username}/events'
+---
+
+Retrieve all public events created by a specific user on the Evento platform.
+
+<Info>
+This endpoint returns all public events **created by** the specified user. To get events the user is attending (RSVP'd), use the profile-events endpoint instead.
+</Info>
+
+## Endpoint
+
+```
+GET https://api.evento.so/api/public/v1/users/{username}/events
+```
+
+## Path Parameters
+
+<ParamField path="username" type="string" required>
+  The username of the Evento user
+  
+  Example: `johndoe`
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="since" type="string" format="date-time">
+  Filter events starting from this date (inclusive)
+  
+  Format: ISO 8601 (`YYYY-MM-DDTHH:mm:ssZ`)
+  
+  Example: `2024-01-01T00:00:00Z`
+</ParamField>
+
+<ParamField query="from" type="string" format="date-time">
+  Alias for `since` parameter
+  
+  Format: ISO 8601 (`YYYY-MM-DDTHH:mm:ssZ`)
+</ParamField>
+
+<ParamField query="to" type="string" format="date-time">
+  Filter events up to this date (inclusive)
+  
+  Format: ISO 8601 (`YYYY-MM-DDTHH:mm:ssZ`)
+  
+  Example: `2024-12-31T23:59:59Z`
+</ParamField>
+
+## Headers
+
+<ParamField header="x-evento-api-key" type="string" required>
+  Your API key for authentication
+</ParamField>
+
+## Response
+
+### Success Response (200)
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message including the username
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  An array of event objects representing all public events created by the user
+  
+  <Expandable title="Event Object Properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the event
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      The title of the event
+    </ResponseField>
+    
+    <ResponseField name="description" type="string">
+      Detailed description of the event
+    </ResponseField>
+    
+    <ResponseField name="cover" type="string">
+      URL to the event's cover image
+    </ResponseField>
+    
+    <ResponseField name="location" type="string">
+      Location details for the event
+    </ResponseField>
+    
+    <ResponseField name="start_date" type="string">
+      Event start date and time in ISO 8601 format
+    </ResponseField>
+    
+    <ResponseField name="end_date" type="string | null">
+      Event end date and time in ISO 8601 format
+    </ResponseField>
+    
+    <ResponseField name="timezone" type="string">
+      Timezone for the event (IANA timezone)
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Event status (always "published" for public API)
+    </ResponseField>
+    
+    <ResponseField name="visibility" type="string">
+      Event visibility (always "public" for public API)
+    </ResponseField>
+    
+    <ResponseField name="cost" type="number | null">
+      Event cost in USD (null = free)
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="string">
+      Timestamp when the event was created
+    </ResponseField>
+    
+    <ResponseField name="creator" type="object">
+      Information about the event creator
+      
+      <Expandable title="Creator Properties">
+        <ResponseField name="id" type="string">
+          User ID
+        </ResponseField>
+        
+        <ResponseField name="username" type="string">
+          Username of the event creator
+        </ResponseField>
+        
+        <ResponseField name="image" type="string">
+          URL to the user's profile image
+        </ResponseField>
+        
+        <ResponseField name="verification_status" type="string | null">
+          Verification status of the user
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="links" type="object">
+      External links for the event
+      
+      <Expandable title="Links Properties">
+        <ResponseField name="spotify_url" type="string | null">
+          Spotify playlist URL
+        </ResponseField>
+        
+        <ResponseField name="wavlake_url" type="string | null">
+          Wavlake URL
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="contributions" type="object">
+      Payment methods for contributions
+      
+      <Expandable title="Contribution Properties">
+        <ResponseField name="cashapp" type="string | null">
+          CashApp handle
+        </ResponseField>
+        
+        <ResponseField name="venmo" type="string | null">
+          Venmo handle
+        </ResponseField>
+        
+        <ResponseField name="paypal" type="string | null">
+          PayPal email or handle
+        </ResponseField>
+        
+        <ResponseField name="btc_lightning" type="string | null">
+          Bitcoin Lightning address
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.evento.so/api/public/v1/users/johndoe/events?since=2024-01-01T00:00:00Z" \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.evento.so/api/public/v1/users/johndoe/events?since=2024-01-01T00:00:00Z',
+  {
+    method: 'GET',
+    headers: {
+      'x-evento-api-key': 'YOUR_API_KEY'
+    }
+  }
+);
+
+const result = await response.json();
+
+if (result.success) {
+  console.log(`Found ${result.data.length} events`);
+  result.data.forEach(event => {
+    console.log(`- ${event.title} on ${event.start_date}`);
+  });
+}
+```
+
+```python Python
+import requests
+from datetime import datetime
+
+url = "https://api.evento.so/api/public/v1/users/johndoe/events"
+params = {
+    "since": "2024-01-01T00:00:00Z",
+    "to": "2024-12-31T23:59:59Z"
+}
+headers = {
+    "x-evento-api-key": "YOUR_API_KEY"
+}
+
+response = requests.get(url, params=params, headers=headers)
+result = response.json()
+
+if result["success"]:
+    print(f"Found {len(result['data'])} events")
+    for event in result["data"]:
+        print(f"- {event['title']} on {event['start_date']}")
+```
+
+```php PHP
+<?php
+$curl = curl_init();
+
+$params = http_build_query([
+    'since' => '2024-01-01T00:00:00Z',
+    'to' => '2024-12-31T23:59:59Z'
+]);
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://api.evento.so/api/public/v1/users/johndoe/events?' . $params,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => array(
+    'x-evento-api-key: YOUR_API_KEY'
+  ),
+));
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+$result = json_decode($response, true);
+
+if ($result['success']) {
+    echo "Found " . count($result['data']) . " events\n";
+    foreach ($result['data'] as $event) {
+        echo "- {$event['title']} on {$event['start_date']}\n";
+    }
+}
+?>
+```
+
+</CodeGroup>
+
+## Response Example
+
+```json
+{
+  "success": true,
+  "message": "Events fetched successfully for user johndoe",
+  "data": [
+    {
+      "id": "evt_abc123",
+      "title": "Summer Music Festival 2024",
+      "description": "An outdoor music festival featuring local artists",
+      "cover": "https://example.com/summer-fest.jpg",
+      "location": "Golden Gate Park, San Francisco",
+      "start_date": "2024-07-15T12:00:00Z",
+      "end_date": "2024-07-15T22:00:00Z",
+      "timezone": "America/Los_Angeles",
+      "status": "published",
+      "visibility": "public",
+      "cost": 45.00,
+      "created_at": "2024-05-01T10:00:00Z",
+      "creator": {
+        "id": "usr_xyz789",
+        "username": "johndoe",
+        "image": "https://example.com/johndoe.jpg",
+        "verification_status": "verified"
+      },
+      "links": {
+        "spotify_url": "https://spotify.com/playlist/summer2024",
+        "wavlake_url": null
+      },
+      "contributions": {
+        "cashapp": "$johndoe",
+        "venmo": "@johndoe",
+        "paypal": "johndoe@example.com",
+        "btc_lightning": null
+      }
+    },
+    {
+      "id": "evt_def456",
+      "title": "Tech Talk Tuesday",
+      "description": "Weekly tech talks on emerging technologies",
+      "cover": "https://example.com/tech-talk.jpg",
+      "location": "Online",
+      "start_date": "2024-08-20T18:00:00Z",
+      "end_date": "2024-08-20T19:30:00Z",
+      "timezone": "America/Los_Angeles",
+      "status": "published",
+      "visibility": "public",
+      "cost": null,
+      "created_at": "2024-07-15T14:00:00Z",
+      "creator": {
+        "id": "usr_xyz789",
+        "username": "johndoe",
+        "image": "https://example.com/johndoe.jpg",
+        "verification_status": "verified"
+      },
+      "links": {
+        "spotify_url": null,
+        "wavlake_url": null
+      },
+      "contributions": {
+        "cashapp": "$johndoe",
+        "venmo": null,
+        "paypal": null,
+        "btc_lightning": "johndoe@getalby.com"
+      }
+    }
+  ]
+}
+```
+
+## Error Responses
+
+<AccordionGroup>
+  <Accordion title="400 - Bad Request (Missing Username)">
+    ```json
+    {
+      "success": false,
+      "message": "Username is required"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="400 - Bad Request (Invalid Date Format)">
+    ```json
+    {
+      "success": false,
+      "message": "Invalid date format. Use ISO 8601 format"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="401 - Unauthorized">
+    ```json
+    {
+      "success": false,
+      "message": "Not authenticated."
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="404 - Not Found">
+    ```json
+    {
+      "success": false,
+      "message": "User not found"
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Notes
+
+<Note>
+- This endpoint returns events **created by** the user, not events they're attending
+- Events are sorted by creation date (most recent first)
+- Only published, public events are returned
+- Date filtering applies to the event's start date
+- An empty array is returned if no events match the criteria
+</Note>
+
+<Tip>
+Use date filtering to reduce the response size and improve performance when dealing with users who have many events.
+</Tip>
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card
+    title="Profile Events"
+    icon="user-group"
+    href="/api-reference/users/get-profile-events"
+  >
+    Get events created by or RSVP'd to by a user
+  </Card>
+  <Card
+    title="Upcoming Events"
+    icon="calendar-plus"
+    href="/api-reference/users/get-upcoming-events"
+  >
+    Get only upcoming events for a user
+  </Card>
+</CardGroup>

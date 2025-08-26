@@ -1,136 +1,269 @@
 ---
-title: Evento API Reference
-sidebarTitle: API Reference
-description: "Access public events data with our simple, powerful REST API"
+title: Evento Public API
+sidebarTitle: Overview
+description: "Access public events data from the Evento platform with our simple, powerful REST API"
 ---
 
-The Evento API provides a simple way to access public event data. With just one endpoint, you can retrieve all public events associated with any username on the Evento platform.
+The Evento Public API provides programmatic access to public event data from the Evento platform. This RESTful API allows developers to retrieve event information, user events, and build integrations with Evento.
 
 <Info>
-The Evento API uses RESTful principles and returns JSON responses with a structured wrapper. All data returned is from public events created by the specified user.
+**Base URL**: `https://api.evento.so/api/public/v1`  
+**Version**: 1.0.0  
+**Authentication**: API key required in `x-evento-api-key` header
 </Info>
 
 ## Quick Start
 
-Get up and running with the Evento API in minutes.
+Get up and running with the Evento Public API in minutes.
 
 <CardGroup cols={2}>
   <Card
     title="Get API Access"
-    icon="calendar-plus"
+    icon="key"
     href="https://cal.com/evento/api"
   >
     Schedule a call with our team to get your API key.
   </Card>
   <Card
-    title="Make Your First Call"
+    title="View Endpoints"
     icon="code"
-    href="/api-reference/get"
+    href="#available-endpoints"
   >
-    Learn how to fetch events with our GET endpoint.
+    Explore our 5 available endpoints for event data.
   </Card>
   <Card
-    title="Explore Response Data"
+    title="Authentication"
+    icon="lock"
+    href="#authentication"
+  >
+    Learn how to authenticate your API requests.
+  </Card>
+  <Card
+    title="Response Format"
     icon="database"
-    href="/api-reference/get#response"
+    href="#response-format"
   >
-    Understand the complete event data structure.
-  </Card>
-  <Card
-    title="Integration Examples"
-    icon="puzzle-piece"
-    href="/api-reference/get#examples"
-  >
-    See code examples in multiple languages.
+    Understand our consistent response structure.
   </Card>
 </CardGroup>
 
-## API Overview
+## Available Endpoints
 
-The Evento API is designed with simplicity in mind:
+The Evento Public API offers 5 endpoints to access event data:
 
-- **Single Endpoint**: One endpoint to get all public events created by a username  
-- **Query Parameter**: Username passed as a query parameter for flexibility
-- **Structured Responses**: JSON responses with success, message, and data wrapper
-- **Public Events Only**: Access only to published, publicly visible events
+### Events
+- **GET /events/{eventId}** - Retrieve detailed information about a specific event
+
+### Users
+- **GET /users/{username}/events** - Get all public events created by a user
+- **GET /users/{username}/profile-events** - Get events created by or RSVP'd to by a user
+- **GET /users/{username}/upcoming-events** - Get upcoming events hosted by a user
+- **GET /users/{username}/past-events** - Get past events hosted by a user
 
 <Note>
-The API provides read-only access to public events created by users. It returns all published events where visibility = "public" - no RSVP filtering is applied.
+All endpoints return only **public, published events**. Private or draft events are never accessible via the Public API.
 </Note>
 
 ## Authentication
 
-All API requests require authentication using an API key.
+All API requests require authentication via an API key. Include your API key in the request headers:
 
-<Warning>
-You must include your API key in the `x-evento-api-key` header for all requests.
-</Warning>
+```http
+x-evento-api-key: YOUR_API_KEY
+```
 
-### Getting Your API Key
+### Example Request
 
-To obtain an API key, please schedule a call with our team:
+```bash
+curl -H "x-evento-api-key: YOUR_API_KEY" \
+  https://api.evento.so/api/public/v1/events/EVENT_ID
+```
+
+### Obtaining an API Key
+
+To obtain an API key, please contact the Evento development team:
 
 <Card
   title="Schedule API Access Call"
   icon="phone"
   href="https://cal.com/evento/api"
-  cta="Book Now"
 >
   Our team will provide you with an API key and discuss your use case.
 </Card>
 
-### Using Your API Key
-
-Include your API key in the request header:
-
-```bash
-curl -X GET "https://evento.so/api/ext/v1/events?username=YOUR_USERNAME" \
-  -H "x-evento-api-key: YOUR_API_KEY"
-```
-
-## HTTP Status Codes
-
-The Evento API uses standard HTTP status codes to indicate success or failure.
-
-<AccordionGroup>
-  <Accordion title="200 - Success" icon="check">
-    The request was successful. Event data is returned in the response body.
-  </Accordion>
-  <Accordion title="400 - Bad Request" icon="x">
-    Invalid request - missing username, user not found, RPC error, or general failure. All server errors return 400 instead of 500.
-  </Accordion>
-  <Accordion title="401 - Unauthorized" icon="lock">
-    Authentication failed. Check your API key in the `x-evento-api-key` header.
-  </Accordion>
-</AccordionGroup>
-
 ## Response Format
 
-All successful API responses return JSON data with the following structure:
+All API responses follow a consistent JSON structure:
 
-<Info>
-All responses include a structured wrapper with success status, message, and data. Each event includes comprehensive details including dates, location, creator information, and event metadata.
-</Info>
+### Success Response
 
-### Key Features
+```json
+{
+  "success": true,
+  "message": "Descriptive success message",
+  "data": { /* Response data */ }
+}
+```
 
-<CardGroup cols={3}>
-  <Card title="Event Details" icon="calendar">
-    Complete event information including title, description, cost, and location.
+### Error Response
+
+```json
+{
+  "success": false,
+  "message": "Error description"
+}
+```
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Date Filtering" icon="calendar">
+    Filter events by date range using `since`, `from`, and `to` parameters
   </Card>
-  <Card title="Date Handling" icon="clock">
-    Multiple date formats and timezone information for flexible integration.
+  <Card title="Pagination" icon="list">
+    Control result sets with `limit` and `offset` parameters (max 100 per page)
   </Card>
-  <Card title="Creator Info" icon="user">
-    Event creator details including username, image, and verification status.
+  <Card title="Event Details" icon="info">
+    Get comprehensive event information including location, dates, creator, and links
+  </Card>
+  <Card title="Contribution Methods" icon="dollar">
+    Access payment and donation methods for events
   </Card>
 </CardGroup>
 
+## Query Parameters
+
+### Date Filtering
+- `since` or `from` - Filter events starting from this date (ISO 8601)
+- `to` - Filter events up to this date (ISO 8601)
+
+### Pagination
+- `limit` - Number of results to return (1-100, default varies by endpoint)
+- `offset` - Number of results to skip for pagination
+
+Example:
+```bash
+curl -H "x-evento-api-key: YOUR_API_KEY" \
+  "https://api.evento.so/api/public/v1/users/johndoe/events?since=2024-01-01T00:00:00Z&limit=20&offset=0"
+```
+
+## Event Object
+
+Events returned by the API include the following fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique event identifier |
+| `title` | string | Event title |
+| `description` | string | Event description (may contain markdown) |
+| `cover` | string | URL to event cover image |
+| `location` | string | Event location |
+| `start_date` | string | Event start date/time (ISO 8601) |
+| `end_date` | string \| null | Event end date/time (ISO 8601) |
+| `timezone` | string | Event timezone (IANA timezone) |
+| `status` | string | Always "published" for public API |
+| `visibility` | string | Always "public" for public API |
+| `cost` | number \| null | Event cost in USD (null = free) |
+| `created_at` | string | Event creation timestamp |
+| `creator` | object | Event creator information |
+| `links` | object | External links (Spotify, Wavlake) |
+| `contributions` | object | Payment/donation methods |
+
+## HTTP Status Codes
+
+<AccordionGroup>
+  <Accordion title="200 - Success" icon="check">
+    The request was successful. Data is returned in the response body.
+  </Accordion>
+  <Accordion title="400 - Bad Request" icon="x">
+    Invalid parameters or request format. Check the error message for details.
+  </Accordion>
+  <Accordion title="401 - Unauthorized" icon="lock">
+    Invalid or missing API key. Ensure your API key is included in the `x-evento-api-key` header.
+  </Accordion>
+  <Accordion title="404 - Not Found" icon="search">
+    The requested resource was not found.
+  </Accordion>
+  <Accordion title="500 - Internal Server Error" icon="warning">
+    Server error. Please try again or contact support if the issue persists.
+  </Accordion>
+</AccordionGroup>
+
 ## Rate Limiting
 
-<Tip>
-Currently, there are no rate limits on the Evento API. However, we recommend implementing reasonable request intervals to ensure optimal performance.
-</Tip>
+Currently, there are no enforced rate limits. However, we recommend:
+- Maximum 100 requests per minute per API key
+- Implement exponential backoff for retries
+- Cache responses when appropriate
+
+<Warning>
+Please use the API responsibly. Excessive usage may result in rate limiting being implemented.
+</Warning>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Caching" icon="box">
+    Implement appropriate caching to reduce API calls
+  </Card>
+  <Card title="Error Handling" icon="shield">
+    Always check the `success` field before processing data
+  </Card>
+  <Card title="Pagination" icon="arrow-right">
+    Use pagination for large result sets to improve performance
+  </Card>
+  <Card title="Date Filtering" icon="clock">
+    Use date filters to retrieve only relevant events
+  </Card>
+</CardGroup>
+
+## Code Examples
+
+### JavaScript/Node.js
+
+```javascript
+const EVENTO_API_KEY = 'YOUR_API_KEY';
+const BASE_URL = 'https://api.evento.so/api/public/v1';
+
+async function getUserUpcomingEvents(username) {
+  const response = await fetch(
+    `${BASE_URL}/users/${username}/upcoming-events?limit=10`,
+    {
+      headers: {
+        'x-evento-api-key': EVENTO_API_KEY
+      }
+    }
+  );
+  
+  const data = await response.json();
+  
+  if (!data.success) {
+    throw new Error(data.message);
+  }
+  
+  return data.data;
+}
+```
+
+### Python
+
+```python
+import requests
+
+EVENTO_API_KEY = 'YOUR_API_KEY'
+BASE_URL = 'https://api.evento.so/api/public/v1'
+
+def get_event(event_id):
+    headers = {'x-evento-api-key': EVENTO_API_KEY}
+    response = requests.get(f'{BASE_URL}/events/{event_id}', headers=headers)
+    
+    data = response.json()
+    
+    if not data['success']:
+        raise Exception(data['message'])
+    
+    return data['data']
+```
 
 ## Need Help?
 
@@ -138,7 +271,7 @@ Currently, there are no rate limits on the Evento API. However, we recommend imp
   <Card
     title="API Reference"
     icon="book"
-    href="/api-reference/get"
+    href="/api-reference/events/get-event-by-id"
   >
     Detailed endpoint documentation with examples.
   </Card>
@@ -150,3 +283,11 @@ Currently, there are no rate limits on the Evento API. However, we recommend imp
     Get help from our technical team.
   </Card>
 </CardGroup>
+
+## Changelog
+
+### Version 1.0.0 (August 26, 2025)
+- Renamed API path from `/api/ext/v1` to `/api/public/v1`
+- Reorganized endpoints to be more RESTful
+- Added 4 new endpoints for user events
+- Improved documentation and added comprehensive examples

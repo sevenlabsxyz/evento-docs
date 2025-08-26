@@ -1,0 +1,337 @@
+---
+title: 'Get Event by ID'
+sidebarTitle: 'Get Event'
+description: 'Retrieve detailed information about a specific event'
+api: 'GET https://api.evento.so/api/public/v1/events/{eventId}'
+---
+
+Retrieve detailed information about a specific event using its unique identifier.
+
+<Info>
+This endpoint returns complete details for a single public event, including creator information, contribution methods, and external links.
+</Info>
+
+## Endpoint
+
+```
+GET https://api.evento.so/api/public/v1/events/{eventId}
+```
+
+## Path Parameters
+
+<ParamField path="eventId" type="string" required>
+  The unique identifier of the event
+  
+  Example: `evt_abc123`
+</ParamField>
+
+## Headers
+
+<ParamField header="x-evento-api-key" type="string" required>
+  Your API key for authentication
+</ParamField>
+
+## Response
+
+### Success Response (200)
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message confirming event details were fetched
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The event object containing all event details
+  
+  <Expandable title="Event Object Properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the event
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      The title of the event
+    </ResponseField>
+    
+    <ResponseField name="description" type="string">
+      Detailed description of the event (may contain markdown)
+    </ResponseField>
+    
+    <ResponseField name="cover" type="string">
+      URL to the event's cover image
+    </ResponseField>
+    
+    <ResponseField name="location" type="string">
+      Location details for the event
+    </ResponseField>
+    
+    <ResponseField name="start_date" type="string">
+      Event start date and time in ISO 8601 format
+    </ResponseField>
+    
+    <ResponseField name="end_date" type="string | null">
+      Event end date and time in ISO 8601 format (optional)
+    </ResponseField>
+    
+    <ResponseField name="timezone" type="string">
+      Timezone for the event (IANA timezone identifier)
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Event status (always "published" for public API)
+    </ResponseField>
+    
+    <ResponseField name="visibility" type="string">
+      Event visibility (always "public" for public API)
+    </ResponseField>
+    
+    <ResponseField name="cost" type="number | null">
+      Event cost in USD (null indicates free event)
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="string">
+      Timestamp when the event was created (ISO 8601)
+    </ResponseField>
+    
+    <ResponseField name="creator" type="object">
+      Information about the event creator
+      
+      <Expandable title="Creator Properties">
+        <ResponseField name="id" type="string">
+          Unique identifier for the user
+        </ResponseField>
+        
+        <ResponseField name="username" type="string">
+          Username of the event creator
+        </ResponseField>
+        
+        <ResponseField name="image" type="string">
+          URL to the user's profile image
+        </ResponseField>
+        
+        <ResponseField name="verification_status" type="string | null">
+          Verification status of the user account
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="links" type="object">
+      External links associated with the event
+      
+      <Expandable title="Links Properties">
+        <ResponseField name="spotify_url" type="string | null">
+          Spotify playlist URL for the event
+        </ResponseField>
+        
+        <ResponseField name="wavlake_url" type="string | null">
+          Wavlake URL for the event
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="contributions" type="object">
+      Payment and contribution methods for the event
+      
+      <Expandable title="Contribution Properties">
+        <ResponseField name="cashapp" type="string | null">
+          CashApp handle for contributions
+        </ResponseField>
+        
+        <ResponseField name="venmo" type="string | null">
+          Venmo handle for contributions
+        </ResponseField>
+        
+        <ResponseField name="paypal" type="string | null">
+          PayPal email or handle for contributions
+        </ResponseField>
+        
+        <ResponseField name="btc_lightning" type="string | null">
+          Bitcoin Lightning address for contributions
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.evento.so/api/public/v1/events/evt_abc123" \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.evento.so/api/public/v1/events/evt_abc123', {
+  method: 'GET',
+  headers: {
+    'x-evento-api-key': 'YOUR_API_KEY'
+  }
+});
+
+const result = await response.json();
+
+if (result.success) {
+  console.log('Event:', result.data);
+} else {
+  console.error('Error:', result.message);
+}
+```
+
+```python Python
+import requests
+
+url = "https://api.evento.so/api/public/v1/events/evt_abc123"
+headers = {
+    "x-evento-api-key": "YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+result = response.json()
+
+if result["success"]:
+    print("Event:", result["data"])
+else:
+    print("Error:", result["message"])
+```
+
+```php PHP
+<?php
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://api.evento.so/api/public/v1/events/evt_abc123',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => array(
+    'x-evento-api-key: YOUR_API_KEY'
+  ),
+));
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+$result = json_decode($response, true);
+
+if ($result['success']) {
+    echo "Event: " . json_encode($result['data']);
+} else {
+    echo "Error: " . $result['message'];
+}
+?>
+```
+
+</CodeGroup>
+
+## Response Example
+
+```json
+{
+  "success": true,
+  "message": "Event details fetched successfully",
+  "data": {
+    "id": "evt_abc123",
+    "title": "Tech Meetup 2024",
+    "description": "Join us for an evening of tech talks and networking with industry leaders",
+    "cover": "https://example.com/event-cover.jpg",
+    "location": "San Francisco, CA",
+    "start_date": "2024-12-15T18:00:00Z",
+    "end_date": "2024-12-15T21:00:00Z",
+    "timezone": "America/Los_Angeles",
+    "status": "published",
+    "visibility": "public",
+    "cost": 0,
+    "created_at": "2024-11-01T10:00:00Z",
+    "creator": {
+      "id": "usr_xyz789",
+      "username": "techorg",
+      "image": "https://example.com/avatar.jpg",
+      "verification_status": "verified"
+    },
+    "links": {
+      "spotify_url": null,
+      "wavlake_url": null
+    },
+    "contributions": {
+      "cashapp": "$techorg",
+      "venmo": "@techorg",
+      "paypal": null,
+      "btc_lightning": null
+    }
+  }
+}
+```
+
+## Error Responses
+
+<AccordionGroup>
+  <Accordion title="400 - Bad Request">
+    ```json
+    {
+      "success": false,
+      "message": "Invalid event ID format"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="401 - Unauthorized">
+    ```json
+    {
+      "success": false,
+      "message": "Not authenticated."
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="404 - Not Found">
+    ```json
+    {
+      "success": false,
+      "message": "Not found."
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="500 - Internal Server Error">
+    ```json
+    {
+      "success": false,
+      "message": "Internal server error"
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Notes
+
+<Note>
+- This endpoint only returns events with `status: "published"` and `visibility: "public"`
+- Event costs are in USD; a `null` value indicates the event is free
+- All dates are returned in ISO 8601 format with timezone information
+- The creator object includes verification status when available
+</Note>
+
+<Tip>
+Cache event data appropriately to reduce API calls, especially for events that don't change frequently.
+</Tip>
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card
+    title="Get API Access"
+    icon="key"
+    href="https://cal.com/evento/api"
+  >
+    Schedule a call to get your API key.
+  </Card>
+  <Card
+    title="Contact Support"
+    icon="headset"
+    href="mailto:api-support@evento.so"
+  >
+    Get technical support from our team.
+  </Card>
+</CardGroup>
