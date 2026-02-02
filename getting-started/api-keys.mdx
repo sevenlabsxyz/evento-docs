@@ -1,0 +1,98 @@
+---
+title: 'Getting API Keys'
+description: 'Learn how to obtain and manage your Evento API keys'
+---
+
+## Overview
+
+Evento uses API keys powered by [unkey.dev](https://unkey.dev) for secure authentication. Each API key is tied to your user account and provides access to public event data.
+
+<Card title="Rate Limits" icon="gauge">
+  All API keys are limited to **1,000 requests per day**. Contact us if you need higher limits.
+</Card>
+
+## Obtaining Your API Key
+
+<Steps>
+  <Step title="Enable Developer Mode">
+    Navigate to your [Evento settings](https://evento.so/settings) and enable **Developer Mode** in your profile settings.
+  </Step>
+  
+  <Step title="Access API Keys Section">
+    Once Developer Mode is enabled, go to [Settings → Developer → API Keys](https://evento.so/settings/developer).
+  </Step>
+  
+  <Step title="Create New API Key">
+    Click **"Create API Key"** and provide a descriptive name for your key (e.g., "Production App", "Development", "MCP Server").
+  </Step>
+  
+  <Step title="Copy Your Key">
+    Your API key will be displayed **only once**. Copy it immediately and store it securely.
+    
+    <Warning>
+      You cannot retrieve the key again after closing the dialog. If you lose it, you'll need to create a new one.
+    </Warning>
+  </Step>
+</Steps>
+
+## Key Management
+
+### Key Limits
+
+- Maximum of **10 active API keys** per user
+- Each key can be named for easy identification
+- Keys can be revoked at any time
+
+### Revoking Keys
+
+If a key is compromised or no longer needed:
+
+<Steps>
+  <Step title="Navigate to API Keys">
+    Go to [Settings → Developer → API Keys](https://evento.so/settings/developer)
+  </Step>
+  
+  <Step title="Find the Key">
+    Locate the key you want to revoke in the list
+  </Step>
+  
+  <Step title="Revoke">
+    Click the **"Revoke"** button next to the key. This action is immediate and irreversible.
+  </Step>
+</Steps>
+
+<Info>
+  Revoking a key will immediately invalidate all requests using that key. Make sure to update your applications before revoking keys in production.
+</Info>
+
+## Security Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Never Commit Keys" icon="code">
+    Don't commit API keys to version control. Use environment variables instead.
+  </Card>
+  
+  <Card title="Rotate Regularly" icon="rotate">
+    Create new keys and revoke old ones periodically to maintain security.
+  </Card>
+  
+  <Card title="Use Separate Keys" icon="layer-group">
+    Use different keys for development, staging, and production environments.
+  </Card>
+  
+  <Card title="Monitor Usage" icon="chart-line">
+    Check your API key usage regularly in the developer dashboard.
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Learn how to use your API key in requests
+  </Card>
+  
+  <Card title="API Overview" icon="book" href="/api-reference/overview">
+    Explore available API endpoints
+  </Card>
+</CardGroup>

@@ -1,0 +1,450 @@
+---
+title: 'React Embed Components'
+description: 'Drop-in React components for displaying Evento content'
+---
+
+## Overview
+
+The `evento-embed-react` package provides ready-to-use React components for embedding Evento content in your application. All components are fully typed, customizable, and optimized for performance.
+
+<CardGroup cols={3}>
+  <Card title="EventCalendar" icon="calendar">
+    Interactive calendar view of events
+  </Card>
+  
+  <Card title="EventCard" icon="rectangle-wide">
+    Single event display card
+  </Card>
+  
+  <Card title="EventList" icon="list">
+    Scrollable list of events
+  </Card>
+</CardGroup>
+
+## Installation
+
+<CodeGroup>
+
+```bash npm
+npm install evento-embed-react
+```
+
+```bash yarn
+yarn add evento-embed-react
+```
+
+```bash pnpm
+pnpm add evento-embed-react
+```
+
+```bash bun
+bun add evento-embed-react
+```
+
+</CodeGroup>
+
+<Info>
+  The package includes TypeScript definitions and requires React 18+.
+</Info>
+
+## Quick Start
+
+```tsx
+import { EventCalendar, EventCard, EventList } from 'evento-embed-react';
+
+function MyApp() {
+  return (
+    <div>
+      <EventCalendar username="satoshi" />
+      <EventCard eventId="evt_abc123" />
+      <EventList username="satoshi" type="upcoming" />
+    </div>
+  );
+}
+```
+
+## Components
+
+### EventCalendar
+
+Interactive calendar displaying events for a specific user.
+
+<CodeGroup>
+
+```tsx Basic Usage
+import { EventCalendar } from 'evento-embed-react';
+
+function Calendar() {
+  return <EventCalendar username="satoshi" />;
+}
+```
+
+```tsx With Props
+import { EventCalendar } from 'evento-embed-react';
+
+function Calendar() {
+  return (
+    <EventCalendar
+      username="satoshi"
+      defaultView="month"
+      onEventClick={(event) => console.log('Clicked:', event)}
+      theme={{
+        primary: '#000000',
+        background: '#ffffff',
+        text: '#333333'
+      }}
+    />
+  );
+}
+```
+
+</CodeGroup>
+
+#### Props
+
+<ParamField path="username" type="string" required>
+  Evento username to display events for
+</ParamField>
+
+<ParamField path="defaultView" type="string" default="month">
+  Initial calendar view: `month`, `week`, or `day`
+</ParamField>
+
+<ParamField path="onEventClick" type="function">
+  Callback when an event is clicked
+  
+  ```tsx
+  (event: Event) => void
+  ```
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Custom theme colors (see [Theming](#theming))
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes
+</ParamField>
+
+---
+
+### EventCard
+
+Display a single event with all details.
+
+<CodeGroup>
+
+```tsx Basic Usage
+import { EventCard } from 'evento-embed-react';
+
+function Card() {
+  return <EventCard eventId="evt_abc123" />;
+}
+```
+
+```tsx With Props
+import { EventCard } from 'evento-embed-react';
+
+function Card() {
+  return (
+    <EventCard
+      eventId="evt_abc123"
+      variant="compact"
+      showOrganizer={true}
+      onRegisterClick={(event) => {
+        window.location.href = `https://evento.so/e/${event.slug}`;
+      }}
+      theme={{
+        primary: '#000000',
+        background: '#ffffff',
+        text: '#333333'
+      }}
+    />
+  );
+}
+```
+
+</CodeGroup>
+
+#### Props
+
+<ParamField path="eventId" type="string" required>
+  Unique event identifier (format: `evt_xxxxx`)
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Card style: `default`, `compact`, or `detailed`
+</ParamField>
+
+<ParamField path="showOrganizer" type="boolean" default="true">
+  Whether to display organizer information
+</ParamField>
+
+<ParamField path="onRegisterClick" type="function">
+  Callback when register button is clicked
+  
+  ```tsx
+  (event: Event) => void
+  ```
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Custom theme colors (see [Theming](#theming))
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes
+</ParamField>
+
+---
+
+### EventList
+
+Scrollable list of events with filtering and pagination.
+
+<CodeGroup>
+
+```tsx Basic Usage
+import { EventList } from 'evento-embed-react';
+
+function List() {
+  return <EventList username="satoshi" />;
+}
+```
+
+```tsx With Props
+import { EventList } from 'evento-embed-react';
+
+function List() {
+  return (
+    <EventList
+      username="satoshi"
+      type="upcoming"
+      limit={10}
+      showFilters={true}
+      onEventClick={(event) => {
+        window.location.href = `https://evento.so/e/${event.slug}`;
+      }}
+      theme={{
+        primary: '#000000',
+        background: '#ffffff',
+        text: '#333333'
+      }}
+    />
+  );
+}
+```
+
+</CodeGroup>
+
+#### Props
+
+<ParamField path="username" type="string" required>
+  Evento username to display events for
+</ParamField>
+
+<ParamField path="type" type="string" default="upcoming">
+  Event filter: `upcoming`, `past`, or `profile`
+</ParamField>
+
+<ParamField path="limit" type="number" default="20">
+  Number of events to display per page
+</ParamField>
+
+<ParamField path="showFilters" type="boolean" default="false">
+  Whether to show filter controls
+</ParamField>
+
+<ParamField path="onEventClick" type="function">
+  Callback when an event is clicked
+  
+  ```tsx
+  (event: Event) => void
+  ```
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Custom theme colors (see [Theming](#theming))
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes
+</ParamField>
+
+## Theming
+
+All components accept a `theme` prop for customization. The theme object supports three color variables:
+
+```tsx
+interface Theme {
+  primary: string;    // Primary brand color (buttons, links)
+  background: string; // Background color
+  text: string;       // Text color
+}
+```
+
+### Example Themes
+
+<CodeGroup>
+
+```tsx Dark Theme
+const darkTheme = {
+  primary: '#ffffff',
+  background: '#000000',
+  text: '#e5e5e5'
+};
+
+<EventCalendar username="satoshi" theme={darkTheme} />
+```
+
+```tsx Brand Theme
+const brandTheme = {
+  primary: '#6366f1',
+  background: '#f9fafb',
+  text: '#111827'
+};
+
+<EventList username="satoshi" theme={brandTheme} />
+```
+
+```tsx Bitcoin Theme
+const bitcoinTheme = {
+  primary: '#f7931a',
+  background: '#ffffff',
+  text: '#000000'
+};
+
+<EventCard eventId="evt_abc123" theme={bitcoinTheme} />
+```
+
+</CodeGroup>
+
+### CSS Variables
+
+Components also expose CSS variables for advanced customization:
+
+```css
+.evento-embed {
+  --evento-primary: #000000;
+  --evento-background: #ffffff;
+  --evento-text: #333333;
+  --evento-border-radius: 8px;
+  --evento-spacing: 16px;
+}
+```
+
+## Advanced Usage
+
+### Server-Side Rendering
+
+All components support SSR with Next.js:
+
+```tsx
+// app/events/page.tsx
+import { EventList } from 'evento-embed-react';
+
+export default function EventsPage() {
+  return (
+    <main>
+      <h1>Upcoming Events</h1>
+      <EventList username="satoshi" type="upcoming" />
+    </main>
+  );
+}
+```
+
+### Custom Styling
+
+Combine `className` with your CSS framework:
+
+```tsx
+import { EventCard } from 'evento-embed-react';
+
+function StyledCard() {
+  return (
+    <EventCard
+      eventId="evt_abc123"
+      className="shadow-lg rounded-xl border border-gray-200"
+    />
+  );
+}
+```
+
+### Error Handling
+
+Components handle errors gracefully and display fallback UI:
+
+```tsx
+import { EventCard } from 'evento-embed-react';
+
+function Card() {
+  return (
+    <EventCard
+      eventId="evt_invalid"
+      fallback={<div>Event not found</div>}
+    />
+  );
+}
+```
+
+## TypeScript Support
+
+Full TypeScript definitions are included:
+
+```tsx
+import type { Event, EventCardProps, Theme } from 'evento-embed-react';
+
+const handleClick = (event: Event) => {
+  console.log(event.title, event.startDate);
+};
+
+const props: EventCardProps = {
+  eventId: 'evt_abc123',
+  variant: 'compact',
+  onRegisterClick: handleClick
+};
+```
+
+## Performance
+
+<CardGroup cols={2}>
+  <Card title="Lazy Loading" icon="gauge">
+    Components lazy-load images and data for optimal performance
+  </Card>
+  
+  <Card title="Caching" icon="database">
+    Built-in request caching reduces API calls
+  </Card>
+  
+  <Card title="Tree Shaking" icon="tree">
+    Import only the components you need
+  </Card>
+  
+  <Card title="Bundle Size" icon="box">
+    ~15KB gzipped (all components)
+  </Card>
+</CardGroup>
+
+## Examples
+
+<CardGroup cols={2}>
+  <Card title="View Demo" icon="eye" href="https://evento.so/embed/demo">
+    See live examples of all components
+  </Card>
+  
+  <Card title="GitHub Repo" icon="github" href="https://github.com/evento-so/evento-embed-react">
+    View source code and examples
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/api-reference/overview">
+    Learn about the underlying API
+  </Card>
+  
+  <Card title="Get API Key" icon="key" href="/getting-started/api-keys">
+    Obtain your API key for custom integrations
+  </Card>
+</CardGroup>

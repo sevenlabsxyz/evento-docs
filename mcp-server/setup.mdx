@@ -1,0 +1,353 @@
+---
+title: 'MCP Server Setup'
+description: 'Integrate Evento with Claude Desktop using the Model Context Protocol'
+---
+
+## Overview
+
+The Evento MCP (Model Context Protocol) server enables Claude Desktop to interact with your Evento events directly. This open-source integration runs locally on your machine and provides AI-powered event management capabilities.
+
+<Info>
+  The MCP server uses **stdio transport** and runs entirely on your local machine. Your API key never leaves your computer.
+</Info>
+
+<CardGroup cols={2}>
+  <Card title="Open Source" icon="code">
+    Fully open-source and auditable
+  </Card>
+  
+  <Card title="Local Only" icon="shield">
+    Runs on your machine, no external servers
+  </Card>
+  
+  <Card title="Secure" icon="lock">
+    API key stored in local environment
+  </Card>
+  
+  <Card title="AI-Powered" icon="sparkles">
+    Natural language event queries
+  </Card>
+</CardGroup>
+
+## Prerequisites
+
+Before setting up the MCP server, ensure you have:
+
+- **Claude Desktop** installed ([download here](https://claude.ai/download))
+- **Node.js 18+** installed
+- **Evento API key** ([get one here](/getting-started/api-keys))
+
+## Installation
+
+<Steps>
+  <Step title="Install the MCP Server">
+    Install the Evento MCP server globally via npm:
+    
+    ```bash
+    npm install -g @evento/mcp-server
+    ```
+    
+    <Tip>
+      You can also use `npx` to run without installing globally (see [Alternative Setup](#alternative-setup))
+    </Tip>
+  </Step>
+  
+  <Step title="Get Your API Key">
+    If you haven't already, obtain your Evento API key:
+    
+    1. Enable Developer Mode in [Evento Settings](https://evento.so/settings)
+    2. Navigate to [API Keys](https://evento.so/settings/developer)
+    3. Create a new API key and copy it
+    
+    <Warning>
+      Store your API key securely. You'll need it for the next step.
+    </Warning>
+  </Step>
+  
+  <Step title="Configure Claude Desktop">
+    Add the MCP server to your Claude Desktop configuration:
+    
+    <Tabs>
+      <Tab title="macOS">
+        Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+        
+        ```json
+        {
+          "mcpServers": {
+            "evento": {
+              "command": "evento-mcp",
+              "env": {
+                "EVENTO_PUBLIC_API_KEY": "evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            }
+          }
+        }
+        ```
+      </Tab>
+      
+      <Tab title="Windows">
+        Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+        
+        ```json
+        {
+          "mcpServers": {
+            "evento": {
+              "command": "evento-mcp.cmd",
+              "env": {
+                "EVENTO_PUBLIC_API_KEY": "evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            }
+          }
+        }
+        ```
+      </Tab>
+      
+      <Tab title="Linux">
+        Edit `~/.config/Claude/claude_desktop_config.json`:
+        
+        ```json
+        {
+          "mcpServers": {
+            "evento": {
+              "command": "evento-mcp",
+              "env": {
+                "EVENTO_PUBLIC_API_KEY": "evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            }
+          }
+        }
+        ```
+      </Tab>
+    </Tabs>
+    
+    Replace `evento_xxxxxxxxxxxxxxxxxxxxxxxx` with your actual API key.
+  </Step>
+  
+  <Step title="Restart Claude Desktop">
+    Quit and relaunch Claude Desktop for the changes to take effect.
+  </Step>
+  
+  <Step title="Verify Installation">
+    In Claude Desktop, try asking:
+    
+    > "List my upcoming events"
+    
+    Claude should now be able to access your Evento data!
+  </Step>
+</Steps>
+
+## Alternative Setup
+
+### Using npx (No Global Install)
+
+If you prefer not to install globally, use `npx`:
+
+<CodeGroup>
+
+```json macOS/Linux
+{
+  "mcpServers": {
+    "evento": {
+      "command": "npx",
+      "args": ["-y", "@evento/mcp-server"],
+      "env": {
+        "EVENTO_PUBLIC_API_KEY": "evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}
+```
+
+```json Windows
+{
+  "mcpServers": {
+    "evento": {
+      "command": "npx.cmd",
+      "args": ["-y", "@evento/mcp-server"],
+      "env": {
+        "EVENTO_PUBLIC_API_KEY": "evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+### Using Environment Variables
+
+For better security, store your API key in a system environment variable:
+
+<CodeGroup>
+
+```bash macOS/Linux
+# Add to ~/.zshrc or ~/.bashrc
+export EVENTO_PUBLIC_API_KEY="evento_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+```powershell Windows
+# Run in PowerShell
+[System.Environment]::SetEnvironmentVariable('EVENTO_PUBLIC_API_KEY', 'evento_xxxxxxxxxxxxxxxxxxxxxxxx', 'User')
+```
+
+</CodeGroup>
+
+Then reference it in your config:
+
+```json
+{
+  "mcpServers": {
+    "evento": {
+      "command": "evento-mcp",
+      "env": {
+        "EVENTO_PUBLIC_API_KEY": "${EVENTO_PUBLIC_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+## Available Tools
+
+The MCP server provides two tools that Claude can use:
+
+### list-events
+
+List events for a specific user with filtering options.
+
+**Parameters:**
+- `username` (required) - Evento username
+- `type` (optional) - Filter: `upcoming`, `past`, or `profile`
+- `limit` (optional) - Number of events to return
+
+**Example prompts:**
+- "Show me satoshi's upcoming events"
+- "List all past events for alice"
+- "What events is bob organizing?"
+
+### get-event
+
+Retrieve detailed information about a specific event.
+
+**Parameters:**
+- `eventId` (required) - Event ID (format: `evt_xxxxx`)
+
+**Example prompts:**
+- "Get details for event evt_abc123"
+- "Show me information about the Bitcoin workshop"
+- "What's the capacity for evt_def456?"
+
+## Usage Examples
+
+Once configured, you can interact with Evento naturally through Claude:
+
+<CardGroup cols={2}>
+  <Card title="List Events" icon="list">
+    > "Show me all upcoming events for satoshi"
+    
+    Claude will use the `list-events` tool to fetch and display the events.
+  </Card>
+  
+  <Card title="Event Details" icon="calendar">
+    > "Get details about event evt_abc123"
+    
+    Claude will use the `get-event` tool to retrieve full event information.
+  </Card>
+  
+  <Card title="Natural Queries" icon="message">
+    > "When is the next Bitcoin meetup?"
+    
+    Claude will search events and provide relevant information.
+  </Card>
+  
+  <Card title="Comparisons" icon="scale-balanced">
+    > "Compare ticket sales for my last 3 events"
+    
+    Claude will fetch multiple events and analyze the data.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+### MCP Server Not Appearing
+
+<Steps>
+  <Step title="Check Configuration">
+    Verify your `claude_desktop_config.json` is valid JSON and in the correct location.
+  </Step>
+  
+  <Step title="Verify Installation">
+    Run `evento-mcp --version` in your terminal to confirm installation.
+  </Step>
+  
+  <Step title="Check Logs">
+    View Claude Desktop logs:
+    - **macOS**: `~/Library/Logs/Claude/`
+    - **Windows**: `%APPDATA%\Claude\logs\`
+    - **Linux**: `~/.config/Claude/logs/`
+  </Step>
+  
+  <Step title="Restart Claude">
+    Fully quit and restart Claude Desktop (not just close the window).
+  </Step>
+</Steps>
+
+### API Key Errors
+
+If you see authentication errors:
+
+1. Verify your API key is correct and active in [Evento Settings](https://evento.so/settings/developer)
+2. Ensure the key is properly formatted in the config (no extra spaces or quotes)
+3. Check that you haven't exceeded your rate limit (1,000 requests/day)
+
+### Permission Errors
+
+If you see permission errors on macOS:
+
+```bash
+sudo chown -R $(whoami) ~/Library/Application\ Support/Claude
+```
+
+## Security Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Protect Your Config" icon="shield">
+    Set proper file permissions on your config file:
+    
+    ```bash
+    chmod 600 ~/Library/Application\ Support/Claude/claude_desktop_config.json
+    ```
+  </Card>
+  
+  <Card title="Use Environment Variables" icon="key">
+    Store API keys in system environment variables instead of config files
+  </Card>
+  
+  <Card title="Rotate Keys" icon="rotate">
+    Regularly create new API keys and revoke old ones
+  </Card>
+  
+  <Card title="Monitor Usage" icon="chart-line">
+    Check your API key usage in the Evento developer dashboard
+  </Card>
+</CardGroup>
+
+## Source Code
+
+The Evento MCP server is fully open source:
+
+<Card title="GitHub Repository" icon="github" href="https://github.com/evento-so/evento-mcp-server">
+  View source code, report issues, and contribute
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/api-reference/overview">
+    Learn about the underlying API
+  </Card>
+  
+  <Card title="Get API Key" icon="key" href="/getting-started/api-keys">
+    Create additional API keys
+  </Card>
+</CardGroup>
