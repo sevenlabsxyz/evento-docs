@@ -1,0 +1,101 @@
+---
+title: 'Fetch event guests'
+api: 'GET https://evento.so/api/public/v1/events/{eventId}/guests'
+description: 'Retrieve RSVP guests for a published public event'
+---
+
+## Endpoint
+
+```http
+GET /api/public/v1/events/{eventId}/guests
+```
+
+## Authentication
+
+<Warning>
+  This endpoint requires a public API key.
+</Warning>
+
+```http
+x-evento-api-key: YOUR_API_KEY
+```
+
+## Path parameters
+
+<ParamField path="eventId" type="string" required>
+  Unique event identifier.
+</ParamField>
+
+## Query parameters
+
+<ParamField query="limit" type="integer" default="10">
+  Results per page (1-100).
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Pagination offset.
+</ParamField>
+
+<ParamField query="status" type="string" default="yes">
+  RSVP filter: `yes`, `maybe`, `no`, or `all`.
+</ParamField>
+
+## Request example
+
+```bash
+curl "https://evento.so/api/public/v1/events/evt_abc123/guests?limit=20&status=yes" \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Guest list fetched successfully for event evt_abc123",
+  "data": [
+    {
+      "id": "usr_123",
+      "username": "johndoe",
+      "name": "John Doe",
+      "image": "https://cdn.evento.so/avatars/123.jpg",
+      "verification_status": "verified",
+      "rsvp_status": "yes",
+      "rsvp_date": "2026-06-01T10:30:00Z"
+    }
+  ]
+}
+```
+
+## Privacy rules
+
+<AccordionGroup>
+  <Accordion title="Only public events are eligible">
+    Guest lists are returned only for events with `visibility: public` and `status: published`.
+  </Accordion>
+  <Accordion title="Sensitive fields are stripped">
+    Emails, phone numbers, and private contact details are never returned.
+  </Accordion>
+  <Accordion title="Anonymous guests are filtered">
+    Only guests linked to user profiles are included.
+  </Accordion>
+</AccordionGroup>
+
+## Error codes
+
+| Status | Description |
+|---|---|
+| `400` | Invalid query parameters |
+| `401` | API key missing or invalid |
+| `404` | Event not found or not public |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Get /events/{eventId}" icon="calendar" href="/api/events">
+    Fetch the parent event object and metadata.
+  </Card>
+  <Card title="Get /users/{username}/events" icon="user" href="/api/users">
+    Use organizer-level event listings with pagination.
+  </Card>
+</CardGroup>

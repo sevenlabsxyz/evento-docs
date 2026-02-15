@@ -1,0 +1,113 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Evento API documentation",
+  "theme": "linden",
+  "logo": {
+    "light": "/images/logo-light.svg",
+    "dark": "/images/logo-dark.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#dc2626",
+    "light": "#dc2626",
+    "dark": "#dc2626"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Essentials",
+            "icon": "book-open",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/api-keys",
+              "api/response-format",
+              "api/error-handling",
+              "api/data-models"
+            ]
+          },
+          {
+            "group": "Public API",
+            "icon": "globe",
+            "pages": [
+              "api/public-api-overview",
+              "api/events",
+              "api/event-guests",
+              "api/users"
+            ]
+          },
+          {
+            "group": "Embed API",
+            "icon": "window-maximize",
+            "pages": [
+              "api/embed-api",
+              "api/embed-event",
+              "api/embed-user-events"
+            ]
+          },
+          {
+            "group": "Guides",
+            "icon": "compass",
+            "pages": [
+              "guides/use-cases",
+              "guides/examples",
+              "guides/source-code"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "AI & MCP Server",
+        "groups": [
+          {
+            "group": "MCP server",
+            "icon": "sparkles",
+            "pages": [
+              "ai/setup",
+              "ai/client-configuration",
+              "ai/tools",
+              "ai/architecture",
+              "ai/testing-and-troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Components",
+            "icon": "rectangles-mixed",
+            "pages": [
+              "embed/react-components",
+              "embed/event-calendar",
+              "embed/event-card",
+              "embed/event-list"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/sevenlabsxyz"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get API key",
+      "href": "https://evento.so/"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/sevenlabsxyz"
+    }
+  }
+}

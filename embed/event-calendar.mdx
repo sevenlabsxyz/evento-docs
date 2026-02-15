@@ -1,0 +1,69 @@
+---
+title: 'Event calendar'
+description: 'Render interactive calendar views for a creator event stream'
+---
+
+## Basic usage
+
+```tsx
+import { EventCalendar } from 'evento-embed-react';
+
+export function Calendar() {
+  return <EventCalendar username="satoshi" />;
+}
+```
+
+## Advanced usage
+
+```tsx
+import { EventCalendar } from 'evento-embed-react';
+
+export function Calendar() {
+  return (
+    <EventCalendar
+      username="satoshi"
+      defaultView="month"
+      onEventClick={(event) => console.log('clicked', event)}
+      theme={{ primary: '#000000', background: '#ffffff', text: '#333333' }}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="username" type="string" required>
+  Evento username to render events for.
+</ParamField>
+
+<ParamField path="defaultView" type="string" default="month">
+  Initial view: `month`, `week`, or `day`.
+</ParamField>
+
+<ParamField path="onEventClick" type="function">
+  Callback signature: `(event: Event) => void`.
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Theme object with `primary`, `background`, and `text` values.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names.
+</ParamField>
+
+## Notes
+
+- Supports client rendering and SSR frameworks
+- Works with shared component theme model
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Event card" icon="rectangle-wide" href="/embeds/event-card">
+    Render individual event objects in card format.
+  </Card>
+  <Card title="Event list" icon="list" href="/embeds/event-list">
+    Render list feeds with filters and pagination.
+  </Card>
+</CardGroup>

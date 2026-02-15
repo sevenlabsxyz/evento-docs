@@ -1,0 +1,81 @@
+---
+title: 'Fetch embed event'
+api: 'GET https://evento.so/api/embed/v1/events/{eventId}'
+description: 'Retrieve embed-optimized event payload by event ID'
+---
+
+## Endpoint
+
+```http
+GET /api/embed/v1/events/{eventId}
+```
+
+## Path parameters
+
+<ParamField path="eventId" type="string" required>
+  Unique event identifier.
+</ParamField>
+
+## Request example
+
+<RequestExample>
+
+```bash cURL
+curl https://evento.so/api/embed/v1/events/evt_abc123
+```
+
+```javascript Browser Fetch
+const response = await fetch('https://evento.so/api/embed/v1/events/evt_abc123');
+const payload = await response.json();
+```
+
+</RequestExample>
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Event fetched successfully",
+  "data": {
+    "id": "evt_abc123",
+    "title": "Tech Meetup 2026",
+    "description": "Join us for an evening of tech talks",
+    "cover": "https://cdn.evento.so/covers/abc123.jpg",
+    "start_date": "2026-12-15T18:00:00Z",
+    "end_date": "2026-12-15T21:00:00Z",
+    "timezone": "America/Los_Angeles",
+    "location": {
+      "name": "Tech Hub SF",
+      "city": "San Francisco",
+      "country": "United States"
+    },
+    "url": "https://evento.so/e/evt_abc123",
+    "creator": {
+      "username": "techorg",
+      "image": "https://cdn.evento.so/avatars/techorg.jpg",
+      "verified": true
+    },
+    "status": "upcoming"
+  }
+}
+```
+
+## Error codes
+
+| Status | Description |
+|---|---|
+| `400` | Event ID is missing |
+| `404` | Event not found or not public |
+| `500` | Internal server error |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Get /users/{username}/events" icon="user" href="/api/embed-user-events">
+    Fetch user feeds for calendar and list embeds.
+  </Card>
+  <Card title="Embed API overview" icon="window-maximize" href="/api/embed-api">
+    Review CORS behavior and integration differences.
+  </Card>
+</CardGroup>

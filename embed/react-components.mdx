@@ -1,0 +1,98 @@
+---
+title: 'Components overview'
+description: 'Overview of React components for embedding Evento content'
+---
+
+## Overview
+
+`evento-embed-react` provides typed, reusable React components for rendering Evento event data.
+
+<CardGroup cols={2}>
+  <Card title="Event card" icon="rectangle-wide" href="/embeds/event-card">
+    Single-event card with compact and detailed variants.
+  </Card>
+  <Card title="Event list" icon="list" href="/embeds/event-list">
+    Feed-style list with filtering and pagination options.
+  </Card>
+</CardGroup>
+
+<CardGroup cols={1}>
+  <Card title="Event calendar" icon="calendar" href="/embeds/event-calendar">
+    Interactive calendar for user event timelines.
+  </Card>
+</CardGroup>
+
+## Installation
+
+<CodeGroup>
+
+```bash npm
+npm install evento-embed-react
+```
+
+```bash yarn
+yarn add evento-embed-react
+```
+
+```bash pnpm
+pnpm add evento-embed-react
+```
+
+```bash bun
+bun add evento-embed-react
+```
+
+</CodeGroup>
+
+## Quick start
+
+```tsx
+import { EventCalendar, EventCard, EventList } from 'evento-embed-react';
+
+export function App() {
+  return (
+    <div>
+      <EventCalendar username="satoshi" />
+      <EventCard eventId="evt_abc123" />
+      <EventList username="satoshi" type="upcoming" />
+    </div>
+  );
+}
+```
+
+## Shared theming model
+
+```tsx
+interface Theme {
+  primary: string;
+  background: string;
+  text: string;
+}
+```
+
+```css
+.evento-embed {
+  --evento-primary: #000000;
+  --evento-background: #ffffff;
+  --evento-text: #333333;
+  --evento-border-radius: 8px;
+  --evento-spacing: 16px;
+}
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Event calendar" icon="calendar" href="/embeds/event-calendar">
+    Props, examples, and callback behavior for calendar views.
+  </Card>
+  <Card title="Event card" icon="rectangle-wide" href="/embeds/event-card">
+    Variants, click handlers, and display controls.
+  </Card>
+  <Card title="Event list" icon="list" href="/embeds/event-list">
+    Filtering, pagination, and feed interactions.
+  </Card>
+  <Card title="API overview" icon="book" href="/api/overview">
+    Understand underlying public and embed API payloads.
+  </Card>
+</CardGroup>

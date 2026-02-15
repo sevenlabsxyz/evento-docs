@@ -1,32 +1,32 @@
 ---
-title: 'Getting API Keys'
-description: 'Learn how to obtain and manage your Evento API keys'
+title: 'Quickstart'
+description: 'Create an API key and make your first public API request'
 ---
 
 ## Overview
 
-Evento uses API keys powered by [unkey.dev](https://unkey.dev) for secure authentication. Each API key is tied to your user account and provides access to public event data.
+Use this quickstart to create a key and make your first request in minutes.
 
-<Card title="Rate Limits" icon="gauge">
+<Card title="Rate limits" icon="gauge">
   All API keys are limited to **1,000 requests per day**. Contact us if you need higher limits.
 </Card>
 
-## Obtaining Your API Key
+## 1) Create an API key
 
 <Steps>
-  <Step title="Enable Developer Mode">
+  <Step title="Enable developer mode">
     Navigate to your [Evento settings](https://evento.so/settings) and enable **Developer Mode** in your profile settings.
   </Step>
   
-  <Step title="Access API Keys Section">
+  <Step title="Access API keys section">
     Once Developer Mode is enabled, go to [Settings → Developer → API Keys](https://evento.so/settings/developer).
   </Step>
   
-  <Step title="Create New API Key">
+  <Step title="Create new API key">
     Click **"Create API Key"** and provide a descriptive name for your key (e.g., "Production App", "Development", "MCP Server").
   </Step>
   
-  <Step title="Copy Your Key">
+  <Step title="Copy your key">
     Your API key will be displayed **only once**. Copy it immediately and store it securely.
     
     <Warning>
@@ -35,24 +35,33 @@ Evento uses API keys powered by [unkey.dev](https://unkey.dev) for secure authen
   </Step>
 </Steps>
 
-## Key Management
+## 2) Make your first request
 
-### Key Limits
+```bash
+curl https://evento.so/api/public/v1/events/evt_abc123 \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+If the event exists and is public, the response includes `success: true` and an event object in `data`.
+
+## 3) Key management
+
+### Key limits
 
 - Maximum of **10 active API keys** per user
 - Each key can be named for easy identification
 - Keys can be revoked at any time
 
-### Revoking Keys
+### Revoking keys
 
 If a key is compromised or no longer needed:
 
 <Steps>
-  <Step title="Navigate to API Keys">
+  <Step title="Navigate to API keys">
     Go to [Settings → Developer → API Keys](https://evento.so/settings/developer)
   </Step>
   
-  <Step title="Find the Key">
+  <Step title="Find the key">
     Locate the key you want to revoke in the list
   </Step>
   
@@ -65,34 +74,38 @@ If a key is compromised or no longer needed:
   Revoking a key will immediately invalidate all requests using that key. Make sure to update your applications before revoking keys in production.
 </Info>
 
-## Security Best Practices
+## 4) Security best practices
 
 <CardGroup cols={2}>
-  <Card title="Never Commit Keys" icon="code">
+  <Card title="Never commit keys" icon="code">
     Don't commit API keys to version control. Use environment variables instead.
   </Card>
   
-  <Card title="Rotate Regularly" icon="rotate">
+  <Card title="Rotate regularly" icon="rotate">
     Create new keys and revoke old ones periodically to maintain security.
   </Card>
   
-  <Card title="Use Separate Keys" icon="layer-group">
+  <Card title="Use separate keys" icon="layer-group">
     Use different keys for development, staging, and production environments.
   </Card>
   
-  <Card title="Monitor Usage" icon="chart-line">
+  <Card title="Monitor usage" icon="chart-line">
     Check your API key usage regularly in the developer dashboard.
   </Card>
 </CardGroup>
 
-## Next Steps
+## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+  <Card title="Authentication" icon="lock" href="/api/authentication">
     Learn how to use your API key in requests
   </Card>
   
-  <Card title="API Overview" icon="book" href="/api-reference/overview">
+  <Card title="API overview" icon="book" href="/api/overview">
     Explore available API endpoints
+  </Card>
+
+  <Card title="Get /events/{eventId}" icon="calendar" href="/api/events">
+    Start with the core event details endpoint.
   </Card>
 </CardGroup>

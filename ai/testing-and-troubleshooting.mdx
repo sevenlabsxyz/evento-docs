@@ -1,0 +1,49 @@
+---
+title: 'Testing and troubleshooting'
+description: 'Verification commands, test layers, and common fixes for the Evento public MCP server'
+---
+
+## Test commands
+
+```bash
+npm test
+npm run verify
+EVENTO_SMOKE_USERNAME=your-username npm run smoke
+```
+
+## Test layers
+
+- Unit: `tests/public-tools.unit.test.ts`
+- Manifest parity: `tests/manifest-parity.test.ts`
+- MCP stdio e2e: `tests/mcp.e2e.test.ts`
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Missing API key">
+    Set `PUBLIC_API_KEY` in the MCP client `env` block.
+  </Accordion>
+  <Accordion title="Tools not visible in client">
+    Build first (`npm run build`), confirm `dist/index.js` exists, use absolute path in `args`, then restart client.
+  </Accordion>
+  <Accordion title="API errors">
+    Verify key scope, base URL (`EVENTO_API_BASE_URL`), and test with a known username via smoke check.
+  </Accordion>
+</AccordionGroup>
+
+## Security reminders
+
+- Keep API keys in local env config, never source control
+- Rotate keys periodically
+- Monitor usage against rate limits
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Client configuration" icon="sliders" href="/mcp-server/client-configuration">
+    Recheck client wiring and env setup.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/mcp-server/setup">
+    Restart setup from install through first call.
+  </Card>
+</CardGroup>

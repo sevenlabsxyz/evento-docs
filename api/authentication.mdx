@@ -1,0 +1,203 @@
+---
+title: 'Authentication'
+description: 'Authentication behavior across public and embed APIs'
+---
+
+## Overview
+
+Authentication depends on the API surface:
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="key">
+    Requires API key.
+
+    Preferred header: `x-evento-api-key`
+  </Card>
+
+  <Card title="Embed API" icon="globe">
+    No authentication required.
+
+    CORS-enabled for browser access.
+  </Card>
+
+</CardGroup>
+
+<Warning>
+  Never ship your Public API key in client-side JavaScript. Keep keyed requests server-side.
+</Warning>
+
+## Public API headers
+
+Primary option:
+
+```
+x-evento-api-key: YOUR_API_KEY
+```
+
+Alternative option:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Examples
+
+<CodeGroup>
+
+```bash Public API (x-evento-api-key)
+curl https://evento.so/api/public/v1/events/evt_abc123 \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+```bash Public API (Bearer)
+curl https://evento.so/api/public/v1/events/evt_abc123 \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```bash Embed API
+curl https://evento.so/api/embed/v1/events/evt_abc123
+```
+
+```javascript JavaScript (Public)
+const response = await fetch('https://evento.so/api/public/v1/events/evt_abc123', {
+  headers: {
+    'x-evento-api-key': process.env.EVENTO_API_KEY
+  }
+});
+
+const data = await response.json();
+```
+
+```python Python (Public)
+import os
+import requests
+
+headers = {
+    'x-evento-api-key': os.environ['EVENTO_API_KEY']
+}
+
+response = requests.get(
+    'https://evento.so/api/public/v1/events/evt_abc123',
+    headers=headers
+)
+
+data = response.json()
+```
+
+</CodeGroup>
+
+## Error responses
+
+### 401 unauthorized
+
+Returned when the API key is missing, invalid, or revoked:
+
+<ResponseExample>
+```json
+{
+  "success": false,
+  "message": "Not authenticated."
+}
+```
+</ResponseExample>
+
+**Common causes:**
+- Missing `x-evento-api-key` header
+- Invalid API key format
+- Revoked or expired API key
+
+### 403 forbidden
+
+Returned when the key is valid but missing required permissions:
+
+```json
+{
+  "success": false,
+  "message": "Insufficient API key scope."
+}
+```
+
+### 429 too many requests
+
+Returned when you exceed the rate limit (1,000 requests/day):
+
+<ResponseExample>
+```json
+{
+  "success": false,
+  "message": "Too many requests. Please try again later."
+}
+```
+</ResponseExample>
+
+**Response headers include:**
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1640995200
+```
+
+## Best practices
+
+<CardGroup cols={1}>
+  <Card title="Use environment variables" icon="shield">
+    Store API keys in environment variables, never hardcode them
+    
+    ```bash
+    EVENTO_API_KEY=evento_xxx
+    ```
+  </Card>
+</CardGroup>  
+<CardGroup cols={2}>  
+  <Card title="Server-side only" icon="server">
+    Use keyed requests from trusted backend environments only.
+  </Card>
+
+  <Card title="Implement retry logic" icon="rotate">
+    Use exponential backoff when retrying failed requests
+  </Card>
+</CardGroup>
+<CardGroup cols={1}>
+  <Card title="Handle errors gracefully" icon="triangle-exclamation">
+    Always check for 401 and 429 responses and handle them appropriately
+  </Card>
+</CardGroup> 
+
+## CORS notes (Embed API)
+
+Embed API includes permissive CORS headers:
+
+```http
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Headers: Content-Type
+```
+
+## Testing authentication
+
+Use this simple request to verify your API key is working:
+
+<RequestExample>
+```bash cURL
+curl https://evento.so/api/public/v1/events/evt_test \
+  -H "x-evento-api-key: YOUR_API_KEY" \
+  -v
+```
+</RequestExample>
+
+<Tip>
+  If the key is valid but the event does not exist, you will receive `404` instead of `401`.
+</Tip>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Get /events/{eventId}" icon="calendar" href="/api/events">
+    Public event details and guest-list endpoints.
+  </Card>
+
+  <Card title="Embed API" icon="window-maximize" href="/api/embed-api">
+    No-auth endpoints for browser embeds.
+  </Card>
+
+</CardGroup>

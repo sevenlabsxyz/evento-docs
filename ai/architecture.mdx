@@ -1,0 +1,45 @@
+---
+title: 'Architecture'
+description: 'Runtime architecture and execution flow for the Evento public MCP server'
+---
+
+## What this server is
+
+- MCP transport adapter over stdio
+- Tool-to-route mapping layer for public Evento APIs
+- Central auth/header injection using your API key
+- No direct database access and no persistence in the MCP layer
+
+## Key files
+
+- `src/index.ts` - process entrypoint
+- `src/mcp-server.ts` - MCP protocol handling (`tools/list`, `tools/call`)
+- `src/public-tools.ts` - tool registry, executor, auth injection, timeout/retry, normalized responses
+- `PUBLIC_MCP.tools.json` - manifest mirror of runtime tools
+
+## Execution flow
+
+1. MCP client calls `tools/list`
+2. Server returns `PUBLIC_TOOLS`
+3. MCP client calls `tools/call`
+4. Server delegates to `executePublicTool(name, args)`
+5. Executor validates args and resolves path placeholders
+6. Executor sends authenticated API call with timeout/retry policy
+7. Executor normalizes success or error payload back to MCP response
+
+## Error and retry behavior
+
+- Retries retryable statuses: `408`, `429`, `5xx`
+- Retries retryable network failures (timeout, DNS, connection reset classes)
+- Returns MCP `isError: true` for failed tool calls with structured payloads
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Available tools" icon="list-check" href="/mcp-server/tools">
+    Review each tool input schema and route mapping.
+  </Card>
+  <Card title="Testing and troubleshooting" icon="stethoscope" href="/mcp-server/testing-and-troubleshooting">
+    Run verification commands and fix common issues.
+  </Card>
+</CardGroup>

@@ -1,0 +1,58 @@
+---
+title: 'Available tools'
+description: 'Tool inputs and API route mappings for the Evento public MCP server'
+---
+
+## Tool inventory
+
+<CardGroup cols={2}>
+  <Card title="list-events" icon="list">
+    Lists events for a user.
+  </Card>
+  <Card title="get-event" icon="calendar">
+    Fetches event details by ID.
+  </Card>
+</CardGroup>
+
+## list-events
+
+List events for a user.
+
+Input:
+
+- `username` (required, string)
+- `type` (optional, `upcoming | past | profile`)
+- `limit` (optional, number)
+
+Route mapping:
+
+- `GET /public/v1/users/{username}/events`
+
+## get-event
+
+Get event details by ID.
+
+Input:
+
+- `eventId` (required, string)
+
+Route mapping:
+
+- `GET /public/v1/events/{eventId}`
+
+## Prompt examples
+
+- "List my upcoming events"
+- "Show events for satoshi"
+- "Get event evt_abc123"
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/mcp-server/architecture">
+    See how MCP calls are normalized and executed.
+  </Card>
+  <Card title="Testing and troubleshooting" icon="stethoscope" href="/mcp-server/testing-and-troubleshooting">
+    Validate tools and debug failures.
+  </Card>
+</CardGroup>

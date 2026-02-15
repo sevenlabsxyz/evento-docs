@@ -1,0 +1,54 @@
+---
+title: 'Client configuration'
+description: 'Configure the Evento public MCP server in MCP-compatible AI clients'
+---
+
+## Configuration shape
+
+Use the same server block pattern across MCP clients:
+
+```json
+{
+  "mcpServers": {
+    "evento-public": {
+      "command": "node",
+      "args": ["/absolute/path/to/evento-public-mcp/dist/index.js"],
+      "env": {
+        "PUBLIC_API_KEY": "your-evento-api-key",
+        "EVENTO_API_BASE_URL": "https://evento.so"
+      }
+    }
+  }
+}
+```
+
+## Client notes
+
+<AccordionGroup>
+  <Accordion title="Claude Desktop">
+    Add the server block to `claude_desktop_config.json`, save, and restart Claude Desktop.
+  </Accordion>
+  <Accordion title="Cursor">
+    Add the same block in Cursor MCP settings and restart Cursor.
+  </Accordion>
+  <Accordion title="Other MCP clients">
+    Use the same `command`, `args`, and `env` fields where stdio MCP servers are configured.
+  </Accordion>
+</AccordionGroup>
+
+## Best practices
+
+- Use an absolute path in `args`
+- Keep `PUBLIC_API_KEY` in client-local env config
+- Restart the client after config changes
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Available tools" icon="list-check" href="/mcp-server/tools">
+    Test the configured client with `list-events` and `get-event`.
+  </Card>
+  <Card title="Testing and troubleshooting" icon="stethoscope" href="/mcp-server/testing-and-troubleshooting">
+    Verify connectivity and auth quickly.
+  </Card>
+</CardGroup>

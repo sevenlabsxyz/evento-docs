@@ -1,0 +1,149 @@
+---
+title: 'Fetch event'
+api: 'GET https://evento.so/api/public/v1/events/{eventId}'
+description: 'Retrieve detailed information for a published public event'
+---
+
+## Endpoint
+
+```http
+GET /api/public/v1/events/{eventId}
+```
+
+## Authentication
+
+<Warning>
+  This endpoint requires a public API key.
+</Warning>
+
+```http
+x-evento-api-key: YOUR_API_KEY
+```
+
+## Path parameters
+
+<ParamField path="eventId" type="string" required>
+  Unique event identifier.
+</ParamField>
+
+## Request example
+
+<RequestExample>
+
+```bash cURL
+curl https://evento.so/api/public/v1/events/evt_abc123 \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://evento.so/api/public/v1/events/evt_abc123',
+  {
+    headers: {
+      'x-evento-api-key': process.env.EVENTO_API_KEY
+    }
+  }
+);
+
+const payload = await response.json();
+```
+
+```python Python
+import os
+import requests
+
+response = requests.get(
+    'https://evento.so/api/public/v1/events/evt_abc123',
+    headers={'x-evento-api-key': os.environ['EVENTO_API_KEY']}
+)
+
+payload = response.json()
+```
+
+</RequestExample>
+
+## Response
+
+<ResponseExample>
+
+```json 200 OK
+{
+  "success": true,
+  "message": "Event details fetched successfully",
+  "data": {
+    "id": "evt_abc123",
+    "title": "Tech Meetup 2026",
+    "description": "Join us for an evening of talks and demos",
+    "cover": "https://cdn.evento.so/covers/abc123.jpg",
+    "location": "San Francisco, CA",
+    "start_date": "2026-06-15T18:00:00Z",
+    "end_date": "2026-06-15T21:00:00Z",
+    "timezone": "America/Los_Angeles",
+    "status": "published",
+    "visibility": "public",
+    "cost": 25.0,
+    "created_at": "2026-05-20T10:00:00Z",
+    "creator": {
+      "id": "usr_xyz789",
+      "username": "techorg",
+      "image": "https://cdn.evento.so/avatars/xyz789.jpg",
+      "verification_status": "verified"
+    },
+    "links": {
+      "spotify_url": "https://open.spotify.com/playlist/example",
+      "wavlake_url": null
+    },
+    "contributions": {
+      "cashapp": "$techorg",
+      "venmo": "@techorg",
+      "paypal": "donate@techorg.com",
+      "btc_lightning": null
+    }
+  }
+}
+```
+
+```json 404 Not Found
+{
+  "success": false,
+  "message": "Resource not found."
+}
+```
+
+</ResponseExample>
+
+## Error codes
+
+| Status | Description |
+|---|---|
+| `400` | Event ID is missing or invalid |
+| `401` | API key missing or invalid |
+| `404` | Event not found or not public |
+
+## Use cases
+
+<CardGroup cols={2}>
+  <Card title="Event detail pages" icon="browser">
+    Render public event pages with creator, links, and contribution metadata.
+  </Card>
+  <Card title="Calendar ingestion" icon="calendar-days">
+    Import event metadata into scheduling products.
+  </Card>
+  <Card title="Discovery features" icon="compass">
+    Build ranked discovery around public event objects.
+  </Card>
+  <Card title="Content sync" icon="arrows-rotate">
+    Refresh local caches for event data consumers.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Get /events/{eventId}/guests" icon="users" href="/api/event-guests">
+    Retrieve RSVP guests for a public event.
+  </Card>
+  <Card title="Get /users/{username}/events" icon="user" href="/api/users">
+    List public events for an organizer profile.
+  </Card>
+</CardGroup>

@@ -1,0 +1,75 @@
+---
+title: 'Event card'
+description: 'Render a single Evento event as a reusable card component'
+---
+
+## Basic usage
+
+```tsx
+import { EventCard } from 'evento-embed-react';
+
+export function Card() {
+  return <EventCard eventId="evt_abc123" />;
+}
+```
+
+## Advanced usage
+
+```tsx
+import { EventCard } from 'evento-embed-react';
+
+export function Card() {
+  return (
+    <EventCard
+      eventId="evt_abc123"
+      variant="compact"
+      showOrganizer
+      onRegisterClick={(event) => {
+        window.location.href = `https://evento.so/e/${event.slug}`;
+      }}
+      theme={{ primary: '#000000', background: '#ffffff', text: '#333333' }}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="eventId" type="string" required>
+  Event identifier in `evt_xxxxx` format.
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Display style: `default`, `compact`, or `detailed`.
+</ParamField>
+
+<ParamField path="showOrganizer" type="boolean" default="true">
+  Shows organizer profile metadata when enabled.
+</ParamField>
+
+<ParamField path="onRegisterClick" type="function">
+  Callback signature: `(event: Event) => void`.
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Theme object with `primary`, `background`, and `text` values.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names.
+</ParamField>
+
+<ParamField path="fallback" type="ReactNode">
+  Optional fallback UI for missing or invalid event IDs.
+</ParamField>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Event calendar" icon="calendar" href="/embeds/event-calendar">
+    Render event timelines for creator accounts.
+  </Card>
+  <Card title="Event list" icon="list" href="/embeds/event-list">
+    Render multi-event feeds with filters.
+  </Card>
+</CardGroup>

@@ -1,0 +1,59 @@
+---
+title: 'Embed API overview'
+description: 'No-auth, CORS-enabled endpoints for widgets and public embeds'
+---
+
+## Overview
+
+Embed API is optimized for browser-first integrations.
+
+<CardGroup cols={2}>
+  <Card title="No authentication" icon="unlock">
+    Safe for client-side rendering. No API key required.
+  </Card>
+  <Card title="CORS Enabled" icon="globe">
+    Cross-origin access supports `GET` and `OPTIONS`.
+  </Card>
+  <Card title="Compact payloads" icon="feather-pointed">
+    Response objects are tuned for embeds and widgets.
+  </Card>
+  <Card title="Computed status" icon="clock">
+    Status is returned as `upcoming`, `ongoing`, or `past`.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+```
+https://evento.so/api/embed/v1
+```
+
+## CORS headers
+
+```http
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Headers: Content-Type
+```
+
+## Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Get /events/{eventId}" icon="calendar" href="/api/embed-event">
+    Fetch a compact event object for rendering event cards and detail embeds.
+  </Card>
+  <Card title="Get /users/{username}/events" icon="user" href="/api/embed-user-events">
+    Fetch a creator event feed with optional date filters.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="React components" icon="react" href="/embeds/react-components">
+    Use prebuilt UI components on top of Embed API responses.
+  </Card>
+  <Card title="Public API" icon="book" href="/api/events">
+    Use keyed endpoints for richer metadata and guest lists.
+  </Card>
+</CardGroup>

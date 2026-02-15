@@ -1,0 +1,78 @@
+---
+title: 'Quickstart'
+description: 'Set up the Evento public MCP server for any MCP-compatible AI client'
+---
+
+## Overview
+
+The Evento public MCP server runs locally over stdio and maps tool calls to authenticated public Evento API routes.
+
+<CardGroup cols={2}>
+  <Card title="Local stdio transport" icon="terminal">
+    Runs on your machine with no hosted MCP layer.
+  </Card>
+  <Card title="Public API tools" icon="wrench">
+    Includes `list-events` and `get-event`.
+  </Card>
+  <Card title="Central auth injection" icon="key">
+    Injects your API key for every outbound request.
+  </Card>
+  <Card title="Client-agnostic" icon="sparkles">
+    Works with Claude Desktop, Cursor, ChatGPT-compatible MCP clients, and others.
+  </Card>
+</CardGroup>
+
+## Requirements
+
+- Node.js 18+
+- npm
+- Evento developer API key
+- Any MCP client that supports stdio
+
+## Install and run
+
+```bash
+git clone https://github.com/andreneves/evento-public-mcp.git
+cd evento-public-mcp
+npm install
+npm run build
+cp .env.example .env
+```
+
+Set `PUBLIC_API_KEY` in `.env`, then run:
+
+```bash
+npm start
+```
+
+## Minimal environment variables
+
+Required:
+
+- `PUBLIC_API_KEY`
+
+Optional:
+
+- `EVENTO_API_BASE_URL`
+- `EVENTO_API_TIMEOUT_MS`
+- `EVENTO_API_RETRY_ATTEMPTS`
+- `EVENTO_API_RETRY_DELAY_MS`
+- `EVENTO_PUBLIC_API_KEY` (legacy fallback)
+- `EVENTO_SMOKE_USERNAME`
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Client configuration" icon="sliders" href="/mcp-server/client-configuration">
+    Configure Claude Desktop, Cursor, and other MCP clients.
+  </Card>
+  <Card title="Available tools" icon="list-check" href="/mcp-server/tools">
+    See tool inputs and API route mappings.
+  </Card>
+  <Card title="Architecture" icon="diagram-project" href="/mcp-server/architecture">
+    Review runtime flow and file responsibilities.
+  </Card>
+  <Card title="Testing and troubleshooting" icon="stethoscope" href="/mcp-server/testing-and-troubleshooting">
+    Verify setup and debug common failures.
+  </Card>
+</CardGroup>

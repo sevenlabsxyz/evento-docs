@@ -1,0 +1,105 @@
+---
+title: 'Error handling'
+description: 'HTTP status behavior, common failure messages, and recovery strategies'
+---
+
+## Status code matrix
+
+| Status Code | Description | Typical Cause |
+|---|---|---|
+| `200` | OK | Request succeeded |
+| `400` | Bad Request | Invalid params, missing fields, malformed input |
+| `401` | Unauthorized | Missing or invalid API key |
+| `403` | Forbidden | Key lacks required permission |
+| `404` | Not Found | Resource does not exist or is not public |
+| `409` | Conflict | Duplicate resource |
+| `422` | Unprocessable Entity | Missing required properties or semantic validation failure |
+| `429` | Too Many Requests | Rate limit exceeded |
+| `500` | Internal Server Error | Unexpected server-side failure |
+
+## Common error messages
+
+| Scenario | Message |
+|---|---|
+| Missing API Key | `Not authenticated.` |
+| Invalid API Key | `Not authenticated.` |
+| Insufficient Scope | `Insufficient API key scope.` |
+| Rate Limited | `Too many requests. Please try again later.` |
+| Resource Not Found | `Resource not found.` |
+| Event Not Public | `Resource not found.` |
+
+## Recovery playbooks
+
+<AccordionGroup>
+  <Accordion title="401 unauthorized">
+    Verify header format, key environment, and key lifecycle status. For Public API, prefer `x-evento-api-key`.
+  </Accordion>
+  <Accordion title="403 forbidden">
+    Ensure key has required permission(s), such as `events:read` for Public API.
+  </Accordion>
+  <Accordion title="429 too many requests">
+    Implement exponential backoff and queue requests when approaching daily quota.
+  </Accordion>
+  <Accordion title="404 not found">
+    Confirm IDs, usernames, and visibility constraints. Public endpoints only return published public resources.
+  </Accordion>
+</AccordionGroup>
+
+## Backoff example
+
+<CodeGroup>
+
+```javascript JavaScript
+async function fetchWithBackoff(url, options, maxRetries = 4) {
+  for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+    const response = await fetch(url, options);
+
+    if (response.status !== 429) return response;
+    if (attempt === maxRetries) return response;
+
+    const delayMs = 500 * Math.pow(2, attempt);
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+  }
+}
+```
+
+```python Python
+import time
+import requests
+
+
+def get_with_backoff(url, headers, max_retries=4):
+    for attempt in range(max_retries + 1):
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 429:
+            return response
+
+        if attempt == max_retries:
+            return response
+
+        time.sleep(0.5 * (2 ** attempt))
+```
+
+</CodeGroup>
+
+## Error payload example
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "code": "validation_error"
+}
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api/authentication">
+    Header requirements and auth behavior by surface.
+  </Card>
+  <Card title="Response format" icon="code" href="/api/response-format">
+    Shared envelope and payload contracts.
+  </Card>
+</CardGroup>

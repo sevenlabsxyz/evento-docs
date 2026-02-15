@@ -1,0 +1,117 @@
+---
+title: 'Data models'
+description: 'Canonical object schemas for Public and Embed API responses'
+---
+
+## Event object (Public API)
+
+```typescript
+{
+  id: string;
+  title: string;
+  description: string;
+  cover: string;
+  location: string;
+  start_date: string;
+  end_date: string | null;
+  timezone: string;
+  status: 'published';
+  visibility: 'public';
+  cost: number | null;
+  created_at: string;
+  creator: {
+    id: string;
+    username: string;
+    image: string;
+    verification_status: string | null;
+  };
+  links: {
+    spotify_url: string | null;
+    wavlake_url: string | null;
+  };
+  contributions: {
+    cashapp: string | null;
+    venmo: string | null;
+    paypal: string | null;
+    btc_lightning: string | null;
+  };
+}
+```
+
+## Event object (Embed API)
+
+```typescript
+{
+  id: string;
+  title: string;
+  description: string | null;
+  cover: string | null;
+  start_date: string;
+  end_date: string | null;
+  timezone: string;
+  location: {
+    name: string;
+    city: string | null;
+    country: string | null;
+  } | null;
+  url: string;
+  creator: {
+    username: string;
+    image: string | null;
+    verified: boolean;
+  };
+  status: 'upcoming' | 'ongoing' | 'past';
+}
+```
+
+## Guest object
+
+```typescript
+{
+  id: string;
+  username: string;
+  name: string | null;
+  image: string | null;
+  verification_status: string | null;
+  rsvp_status: 'yes' | 'maybe' | 'no';
+  rsvp_date: string;
+}
+```
+
+## Pagination object
+
+```typescript
+{
+  limit: number;
+  offset: number;
+  total: number;
+}
+```
+
+## Model notes
+
+<CardGroup cols={2}>
+  <Card title="Timestamps" icon="clock">
+    All datetime fields are ISO 8601 strings in UTC (`Z`) format.
+  </Card>
+  <Card title="Nullable fields" icon="circle-minus">
+    Optional metadata is represented as `null`, not omitted.
+  </Card>
+  <Card title="Visibility constraints" icon="eye">
+    Public and Embed APIs only return public, published event content.
+  </Card>
+  <Card title="Verification states" icon="badge-check">
+    Verification fields may be `null`, `verified`, or `id_verified`.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Public events" icon="calendar" href="/api/events">
+    See event and guest models in real endpoint responses.
+  </Card>
+  <Card title="Embed API" icon="window-maximize" href="/api/embed-api">
+    See compact embed model payloads.
+  </Card>
+</CardGroup>

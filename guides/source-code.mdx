@@ -1,0 +1,91 @@
+---
+title: 'Source code patterns'
+description: 'Implementation-level references used in Evento API wrappers and services'
+---
+
+## Purpose
+
+This page documents wrapper and utility patterns used by Evento services so integrators can mirror behavior.
+
+<Note>
+  These snippets are representative references, not a published SDK contract.
+</Note>
+
+## Public API auth wrapper pattern
+
+```typescript
+export function withUnkeyAuth(handler: Function, options?: {
+  requiredPermissions?: string[]
+}) {
+  // Validates API key through Unkey
+  // Checks permissions (for example events:read)
+  // Enforces rate limit policies
+  // Returns 401 / 403 / 429 on failure
+}
+```
+
+Accepted key sources:
+
+1. `x-evento-api-key` header (preferred)
+2. `Authorization: Bearer {key}` (alternative)
+
+## Embed API CORS wrapper pattern
+
+```typescript
+export const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export function embedResponse<T>(data: T, message: string, status = 200) {
+  return new Response(JSON.stringify({ success: true, message, data }), {
+    status,
+    headers: corsHeaders,
+  });
+}
+```
+
+## Response utility pattern
+
+```typescript
+export const handle200 = (data: any, message: string) =>
+  NextResponse.json({ success: true, message, data }, { status: 200 });
+
+export const handle401 = () =>
+  NextResponse.json({ success: false, message: 'Not authenticated.' }, { status: 401 });
+
+export const handle404 = () =>
+  NextResponse.json({ success: false, message: 'Resource not found.' }, { status: 404 });
+
+export const handle429 = () =>
+  NextResponse.json({ success: false, message: 'Too many requests. Please try again later.' }, { status: 429 });
+```
+
+## Operational tips
+
+<CardGroup cols={2}>
+  <Card title="Keep contracts stable" icon="shield-halved">
+    Preserve `success`, `message`, and `data` envelope consistency across all handlers.
+  </Card>
+  <Card title="Log with context" icon="file-lines">
+    Include actor, endpoint, and request identifiers in server logs for audit and debugging.
+  </Card>
+  <Card title="Do not expose API keys" icon="lock">
+    Keep keyed requests on trusted backend infrastructure.
+  </Card>
+  <Card title="Prefer explicit validation" icon="list-check">
+    Validate path/query/body before data fetches to avoid noisy 500s.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Examples" icon="code" href="/guides/examples">
+    Practical snippets using these patterns in integrations.
+  </Card>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Header patterns, CORS rules, and auth failure handling.
+  </Card>
+</CardGroup>

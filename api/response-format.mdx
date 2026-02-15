@@ -1,0 +1,96 @@
+---
+title: 'Response format'
+description: 'Standard success and error payload contracts used across Evento APIs'
+---
+
+## Success envelope
+
+All successful responses use the same top-level structure:
+
+```json
+{
+  "success": true,
+  "message": "Descriptive success message",
+  "data": {}
+}
+```
+
+## Error envelope
+
+All error responses include `success: false` and a human-readable message:
+
+```json
+{
+  "success": false,
+  "message": "Error description"
+}
+```
+
+Validation-style failures may include an explicit code:
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "code": "validation_error"
+}
+```
+
+## List responses and pagination
+
+Collection endpoints typically return objects with `events` and `pagination`:
+
+```json
+{
+  "success": true,
+  "message": "Events fetched successfully",
+  "data": {
+    "events": [],
+    "pagination": {
+      "limit": 20,
+      "offset": 0,
+      "total": 42
+    }
+  }
+}
+```
+
+## Field semantics
+
+<ResponseField name="success" type="boolean" required>
+  Indicates whether the request was processed successfully.
+</ResponseField>
+
+<ResponseField name="message" type="string" required>
+  Human-readable outcome message for logging or UX copy.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Endpoint-specific payload. Shape varies by endpoint.
+</ResponseField>
+
+<ResponseField name="code" type="string">
+  Optional machine-readable error category.
+</ResponseField>
+
+## Surface differences
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="globe">
+    Rich payloads with creator metadata, links, contributions, and pagination.
+  </Card>
+  <Card title="Embed API" icon="window-maximize">
+    Lean payloads optimized for browser rendering with computed event status.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Error handling" icon="triangle-exclamation" href="/api/error-handling">
+    Full status code matrix and retry guidance.
+  </Card>
+  <Card title="Data models" icon="table" href="/api/data-models">
+    Canonical object schemas for events, guests, and pagination.
+  </Card>
+</CardGroup>

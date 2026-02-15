@@ -1,0 +1,89 @@
+---
+title: 'API overview'
+description: 'Complete reference for the Evento APIs'
+---
+
+## Evento API reference
+
+Evento exposes two public-facing API surfaces built for different integration models.
+
+<CardGroup cols={1}>
+  <Card title="Public API" icon="globe">
+    Read-only event and user data for third-party server integrations.
+
+    `https://evento.so/api/public/v1`
+  </Card>
+</CardGroup>
+
+<CardGroup cols={1}>
+  <Card title="Embed API" icon="window-maximize">
+    No-auth, CORS-friendly responses for widgets and client-side embeds.
+
+    `https://evento.so/api/embed/v1`
+  </Card>
+</CardGroup>
+
+## API surfaces
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="key" href="/api/public-api-overview">
+    Authenticated with Unkey API keys.
+
+    Includes event details, user event lists, and guest lists.
+  </Card>
+  <Card title="Embed API" icon="code" href="/api/embed-api">
+    No authentication required.
+
+    Built for browser use with full CORS support.
+  </Card>
+</CardGroup>
+<CardGroup cols={1}>
+  <Card title="Shared contracts" icon="brackets-curly" href="/api/response-format">
+    Consistent success and error formats.
+
+    Shared status-code and model conventions across surfaces.
+  </Card>
+</CardGroup>
+
+## Rate limiting
+
+<Info>
+  Public API keys are limited to **1000 requests per day** per key (`evento-public-api` namespace).
+</Info>
+
+### Rate limit headers
+
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 847
+X-RateLimit-Reset: 1640995200
+```
+
+When rate limits are exceeded:
+
+```json
+{
+  "success": false,
+  "message": "Too many requests. Please try again later."
+}
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api/authentication">
+    Header formats, auth flows by surface, and security practices.
+  </Card>
+
+  <Card title="Response format" icon="code" href="/api/response-format">
+    Shared success/error payload contracts and pagination schema.
+  </Card>
+
+  <Card title="Data models" icon="table" href="/api/data-models">
+    Event, guest, and pagination object definitions.
+  </Card>
+
+  <Card title="Integration guides" icon="map" href="/guides/use-cases">
+    Use cases, implementation examples, and source-code patterns.
+  </Card>
+</CardGroup>

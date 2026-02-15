@@ -1,0 +1,91 @@
+---
+title: 'Fetch embed user events'
+api: 'GET https://evento.so/api/embed/v1/users/{username}/events'
+description: 'Retrieve embed-optimized event feeds by username'
+---
+
+## Endpoint
+
+```http
+GET /api/embed/v1/users/{username}/events
+```
+
+## Path parameters
+
+<ParamField path="username" type="string" required>
+  Username (case-insensitive).
+</ParamField>
+
+## Query parameters
+
+<ParamField query="from" type="string">
+  Inclusive start datetime (ISO 8601).
+</ParamField>
+
+<ParamField query="to" type="string">
+  Inclusive end datetime (ISO 8601).
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Number of events to return (max 100).
+</ParamField>
+
+## Request example
+
+```bash
+curl "https://evento.so/api/embed/v1/users/johndoe/events?from=2026-01-01T00:00:00Z&limit=10"
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Events fetched successfully",
+  "data": [
+    {
+      "id": "evt_123",
+      "title": "Monthly Tech Talks",
+      "description": "Lightning talks and networking",
+      "cover": "https://cdn.evento.so/covers/123.jpg",
+      "start_date": "2026-06-15T18:00:00Z",
+      "end_date": "2026-06-15T21:00:00Z",
+      "timezone": "America/Los_Angeles",
+      "location": {
+        "name": "Tech Hub",
+        "city": "San Francisco",
+        "country": "United States"
+      },
+      "url": "https://evento.so/e/evt_123",
+      "creator": {
+        "username": "johndoe",
+        "image": "https://cdn.evento.so/avatars/johndoe.jpg",
+        "verified": true
+      },
+      "status": "upcoming"
+    }
+  ]
+}
+```
+
+## Filter notes
+
+<AccordionGroup>
+  <Accordion title="Date filtering">
+    Filters are applied against `computed_start_date` with inclusive bounds.
+  </Accordion>
+  <Accordion title="Status behavior">
+    `status` is computed per event based on start and end timestamps.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Get /events/{eventId}" icon="calendar" href="/api/embed-event">
+    Fetch an embed event object by ID.
+  </Card>
+  <Card title="React components" icon="react" href="/embeds/react-components">
+    Render feeds with prebuilt components.
+  </Card>
+</CardGroup>

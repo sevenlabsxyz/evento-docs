@@ -1,0 +1,55 @@
+---
+title: 'Public API overview'
+description: 'Authentication, base URL, and endpoint map for authenticated public Evento APIs'
+---
+
+## Base URL
+
+```http
+https://evento.so/api/public/v1
+```
+
+## Authentication
+
+All public endpoints require an API key.
+
+Preferred header:
+
+```http
+x-evento-api-key: YOUR_API_KEY
+```
+
+Alternative header:
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Available endpoints
+
+<CardGroup cols={2}>
+  <Card title="Fetch event" icon="calendar" href="/api/events">
+    `GET /events/{eventId}`
+  </Card>
+  <Card title="Fetch event guests" icon="users" href="/api/event-guests">
+    `GET /events/{eventId}/guests`
+  </Card>
+  <Card title="Fetch user events" icon="user" href="/api/users">
+    `GET /users/{username}/events`
+  </Card>
+</CardGroup>
+
+## Rate limits
+
+Public API keys are limited to `1000` requests per day, per key.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api/authentication">
+    Header behavior, auth errors, and key handling best practices.
+  </Card>
+  <Card title="Response format" icon="code" href="/api/response-format">
+    Shared success and error envelope definitions.
+  </Card>
+</CardGroup>

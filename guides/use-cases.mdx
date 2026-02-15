@@ -1,0 +1,76 @@
+---
+title: 'Use cases'
+description: 'Practical integration patterns for Public and Embed APIs'
+---
+
+## Integration catalog
+
+<CardGroup cols={2}>
+  <Card title="Event discovery platform" icon="compass">
+    Build pages that aggregate events from creator accounts and public event IDs.
+  </Card>
+  <Card title="Calendar and Widgets" icon="calendar-days">
+    Use Embed API for browser-safe calendars and event cards.
+  </Card>
+  <Card title="Event detail views" icon="browser">
+    Render detail pages with creator metadata, links, and contributions.
+  </Card>
+  <Card title="Community intelligence" icon="chart-line">
+    Analyze attendance patterns using guest lists and user event history.
+  </Card>
+</CardGroup>
+
+## 1) Event discovery by ID
+
+<Steps>
+  <Step title="Receive or store event IDs">
+    Persist IDs like `evt_abc123` from user submissions or previous sync jobs.
+  </Step>
+  <Step title="Fetch event details">
+    Call `GET /api/public/v1/events/{eventId}` with `x-evento-api-key`.
+  </Step>
+  <Step title="Render and cache">
+    Cache responses to reduce request volume and improve page speed.
+  </Step>
+</Steps>
+
+## 2) Public creator pages
+
+Use `GET /api/public/v1/users/{username}/events` with `type=upcoming` and `type=past`.
+
+```bash
+curl "https://evento.so/api/public/v1/users/johndoe/events?type=upcoming&limit=20" \
+  -H "x-evento-api-key: YOUR_API_KEY"
+```
+
+## 3) Browser embeds
+
+Use Embed API for no-auth client rendering:
+
+```javascript
+const response = await fetch('https://evento.so/api/embed/v1/users/johndoe/events?limit=10');
+const data = await response.json();
+```
+
+<Info>
+  If you need richer metadata (contributions, links, or full creator details), call Public API from your backend.
+</Info>
+
+## 4) Guest intelligence
+
+Call `GET /api/public/v1/events/{eventId}/guests` to compute:
+
+- RSVP conversion by status (`yes`, `maybe`, `no`)
+- Verification distribution across attendees
+- Repeat attendee trends across event IDs
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Examples" icon="code" href="/guides/examples">
+    Copy-and-adapt snippets for Node, Python, and browser clients.
+  </Card>
+  <Card title="Source code patterns" icon="github" href="/guides/source-code">
+    Wrapper-level implementation references used in Evento services.
+  </Card>
+</CardGroup>

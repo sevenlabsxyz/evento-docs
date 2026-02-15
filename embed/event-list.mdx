@@ -1,0 +1,87 @@
+---
+title: 'Event list'
+description: 'Render event feeds with user-based filters and pagination'
+---
+
+## Basic usage
+
+```tsx
+import { EventList } from 'evento-embed-react';
+
+export function List() {
+  return <EventList username="satoshi" />;
+}
+```
+
+## Advanced usage
+
+```tsx
+import { EventList } from 'evento-embed-react';
+
+export function List() {
+  return (
+    <EventList
+      username="satoshi"
+      type="upcoming"
+      limit={10}
+      showFilters
+      onEventClick={(event) => {
+        window.location.href = `https://evento.so/e/${event.slug}`;
+      }}
+      theme={{ primary: '#000000', background: '#ffffff', text: '#333333' }}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="username" type="string" required>
+  Evento username to render events for.
+</ParamField>
+
+<ParamField path="type" type="string" default="upcoming">
+  Filter type: `upcoming`, `past`, or `profile`.
+</ParamField>
+
+<ParamField path="limit" type="number" default="20">
+  Max events returned per request.
+</ParamField>
+
+<ParamField path="showFilters" type="boolean" default="false">
+  Renders built-in filter controls.
+</ParamField>
+
+<ParamField path="onEventClick" type="function">
+  Callback signature: `(event: Event) => void`.
+</ParamField>
+
+<ParamField path="theme" type="object">
+  Theme object with `primary`, `background`, and `text` values.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names.
+</ParamField>
+
+## Performance notes
+
+<CardGroup cols={2}>
+  <Card title="Caching" icon="database">
+    Built-in request caching reduces repeated API calls.
+  </Card>
+  <Card title="Tree shaking" icon="tree">
+    Import only the component modules you need.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Event calendar" icon="calendar" href="/embeds/event-calendar">
+    Render timeline-style calendar views.
+  </Card>
+  <Card title="Event card" icon="rectangle-wide" href="/embeds/event-card">
+    Render single-event cards and variants.
+  </Card>
+</CardGroup>
