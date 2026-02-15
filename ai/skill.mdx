@@ -1,0 +1,169 @@
+---
+title: 'Agent skill (SKILL.md)'
+description: 'Installable SKILL.md for Evento Public MCP with full content and installation steps'
+---
+
+## Overview
+
+The Evento Public MCP skill is published as a canonical `SKILL.md` in the MCP repository:
+
+- `https://github.com/andreneves/evento-public-mcp/blob/main/SKILL.md`
+
+Use this page to copy/install it quickly and keep your local Claude skill aligned with the maintained source.
+
+## Install locally
+
+Copy the skill into your Claude skills directory:
+
+```bash
+mkdir -p ~/.claude/skills/evento-public-mcp
+cp /absolute/path/to/evento-public-mcp/SKILL.md ~/.claude/skills/evento-public-mcp/SKILL.md
+```
+
+If you use project-local skills instead, copy to:
+
+```bash
+.claude/skills/evento-public-mcp/SKILL.md
+```
+
+## Full skill file
+
+```md
+---
+name: evento-public-mcp
+description: Use Evento Public MCP to fetch Evento event data from AI clients via authenticated tools. Trigger this when users ask to list events by username, fetch event details by event ID, troubleshoot MCP setup, or configure Claude Desktop/Cursor with Evento public API access.
+license: MIT
+metadata:
+  author: evento
+  version: "1.0.0"
+  docs: "https://docs.evento.so"
+---
+
+# Evento Public MCP
+
+## Overview
+
+This skill helps agents use the Evento public MCP server correctly and safely.
+
+It maps MCP tools to authenticated Evento public API routes and is intended for local stdio MCP clients (Claude Desktop, Cursor, and compatible clients).
+
+## When to use
+
+Use this skill when the user wants to:
+
+- List events for a username
+- Get event details from an `evt_*` ID
+- Configure MCP client settings for Evento
+- Troubleshoot missing tools or auth failures
+- Understand MCP architecture and tool routing
+
+Do not use this skill when:
+
+- The user needs admin-only API routes
+- The user asks for direct database/Supabase access
+- The user wants to bypass API key authentication
+
+## Prerequisites
+
+- Node.js 18+
+- npm
+- Evento developer API key
+- Local MCP-compatible client
+
+## MCP setup workflow
+
+1. Clone and build:
+
+   ```bash
+   git clone https://github.com/andreneves/evento-public-mcp.git
+   cd evento-public-mcp
+   npm install
+   npm run build
+   cp .env.example .env
+   ```
+
+2. Set `PUBLIC_API_KEY` in `.env`.
+
+3. Configure client with absolute path to `dist/index.js`:
+
+   ```json
+   {
+     "mcpServers": {
+       "evento-public": {
+         "command": "node",
+         "args": ["/absolute/path/to/evento-public-mcp/dist/index.js"],
+         "env": {
+           "PUBLIC_API_KEY": "your-evento-api-key",
+           "EVENTO_API_BASE_URL": "https://evento.so/api"
+         }
+       }
+     }
+   }
+   ```
+
+4. Restart the MCP client.
+
+## Available tools
+
+### `list-events`
+
+- Purpose: list events for a user
+- Input:
+  - `username` (required, string)
+  - `type` (optional: `upcoming | past | profile`)
+  - `limit` (optional, number)
+- Route:
+  - `GET /public/v1/users/{username}/events`
+
+### `get-event`
+
+- Purpose: fetch event details
+- Input:
+  - `eventId` (required, string)
+- Route:
+  - `GET /public/v1/events/{eventId}`
+
+## Prompt patterns
+
+- "List upcoming events for username `satoshi`."
+- "Get event details for `evt_abc123`."
+- "Help me configure Evento MCP in Claude Desktop."
+
+## Troubleshooting checklist
+
+If tools are not visible:
+
+1. Run `npm run build`
+2. Confirm `dist/index.js` exists
+3. Confirm config uses absolute path
+4. Restart client app
+
+If auth fails:
+
+1. Verify `PUBLIC_API_KEY` is set
+2. Verify key is valid in Evento developer settings
+3. Verify base URL (`EVENTO_API_BASE_URL`) is correct
+
+If API calls fail intermittently:
+
+1. Check timeout/retry env values
+2. Re-run smoke test:
+   ```bash
+   EVENTO_SMOKE_USERNAME=your-username npm run smoke
+   ```
+
+## Implementation constraints
+
+- MCP layer is a thin API adapter only
+- No DB/Supabase access in MCP server
+- Keep tool schema mirrored with `PUBLIC_MCP.tools.json`
+- Preserve normalized success/error responses
+```
+
+## Related docs
+
+- `/mcp-server/quickstart`
+- `/mcp-server/setup`
+- `/mcp-server/client-configuration`
+- `/mcp-server/tools`
+- `/mcp-server/testing-and-troubleshooting`
