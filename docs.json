@@ -75,7 +75,7 @@
           },
           {
             "group": "AI Agents",
-            "icon": "cpu-chip",
+            "icon": "book-open",
             "pages": [
               "ai/skill",
               "ai/add-to-openclaw"
