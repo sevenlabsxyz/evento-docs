@@ -1,0 +1,44 @@
+---
+title: 'Add to OpenClaw'
+description: 'Use the Evento SKILL.md with OpenClaw personal AI agents'
+---
+
+## Overview
+
+If you are leaning into the recent wave of personal AI agents, OpenClaw is one of the simplest ways to run one locally and keep control of your own environment.
+
+The Evento MCP skill can be reused directly in OpenClaw by placing the same `SKILL.md` file into OpenClaw's skills workspace.
+
+Canonical skill source:
+
+- `https://github.com/andreneves/evento-public-mcp/blob/main/SKILL.md`
+
+## Why OpenClaw for this
+
+Based on OpenClaw's public docs and README, it is:
+
+- Open source and self-hosted
+- Designed for personal AI assistant workflows
+- Set up with an onboarding flow (`openclaw onboard --install-daemon`)
+- Compatible with filesystem-based skills (`~/.openclaw/workspace/skills/<skill>/SKILL.md`)
+
+References:
+
+- `https://github.com/openclaw/openclaw`
+- `https://docs.openclaw.ai/start/getting-started`
+
+## Add Evento skill to OpenClaw
+
+Create a skill folder in your OpenClaw workspace and copy the Evento skill file:
+
+```bash
+mkdir -p ~/.openclaw/workspace/skills/evento-public-mcp
+cp /absolute/path/to/evento-public-mcp/SKILL.md ~/.openclaw/workspace/skills/evento-public-mcp/SKILL.md
+```
+
+If OpenClaw is already running, restart your session/gateway so the new skill is picked up.
+
+## Related docs
+
+- `/ai/skill`
+- `https://docs.openclaw.ai/tools/skills`

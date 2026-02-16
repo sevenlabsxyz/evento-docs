@@ -69,9 +69,16 @@
               "ai/setup",
               "ai/client-configuration",
               "ai/tools",
-              "ai/skill",
               "ai/architecture",
               "ai/testing-and-troubleshooting"
+            ]
+          },
+          {
+            "group": "AI Agents",
+            "icon": "cpu-chip",
+            "pages": [
+              "ai/skill",
+              "ai/add-to-openclaw"
             ]
           }
         ]
